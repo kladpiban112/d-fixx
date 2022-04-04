@@ -577,7 +577,7 @@ $('#btnSave').click(function(e){
                 timer: 1500
                 })
                     .then((value) => {
-                    // lineAlert(data.action);
+                    lineAlert(data.action);
                     window.location.replace("dashboard.php?module=repair&page=repair-add-data&personid="+data.personid+"&repairid="+data.repairid+"&act="+data.act);
                     
                 }); 
