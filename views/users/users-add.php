@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING);
 $act = filter_input(INPUT_GET, 'act', FILTER_SANITIZE_STRING);
 $userid = base64_decode($id);

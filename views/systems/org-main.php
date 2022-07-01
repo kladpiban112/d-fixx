@@ -17,6 +17,8 @@
 	<div class="card-body">
 
     <?php
+error_reporting(0);
+
     $numb_data = $conn->query("SELECT count(1) FROM ".DB_PREFIX."org_main u  ")->fetchColumn();
 
   

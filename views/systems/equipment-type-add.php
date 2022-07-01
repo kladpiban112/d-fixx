@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 $eqtypeid = filter_input(INPUT_GET, 'eqtypeid', FILTER_SANITIZE_STRING);
 $act = filter_input(INPUT_GET, 'act', FILTER_SANITIZE_STRING);
 $eqtypeid = base64_decode($eqtypeid);

@@ -226,6 +226,7 @@ $query = "INSERT INTO ".DB_PREFIX."repair_main (repair_id,person_id,org_id, repa
 		$stmt->bindParam(9, $repair_place, PDO::PARAM_STR);
 		$stmt->bindParam(10, $repair_inout, PDO::PARAM_STR);
 		$stmt->execute();
+		addRepairStatus($service_oid);
 
 		$service_oid = $conn->lastInsertId(); // last inserted ID
 		$service_oid_enc = base64_encode($service_oid);

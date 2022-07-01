@@ -104,7 +104,7 @@
                                             <!-- <span class="svg-icon svg-icon-3x svg-icon-success "><i class='bx bx-message-alt-check bx-lg'></i></span> -->
                                             <!-- เสนอราคา -->
                                             <div class="text-dark font-weight-bolder font-size-h2 mt-3"><?php echo $numb_bid;?></div>
-                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=1&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>เสนอราคา</strong></a>
+                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=2&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>เสนอราคา</strong></a>
                                         </div>
                                     </div>
                             </div>
@@ -116,7 +116,7 @@
                                             <!-- <span class="svg-icon svg-icon-3x svg-icon-success"><i class='bx bxs-cog bx-lg'></i></span> -->
                                             <!-- กำลังซ่อม -->
                                             <div class="text-dark font-weight-bolder font-size-h2 mt-3"><?php echo $numb_begin_work;?></div>
-                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=2&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>กำลังซ่อม</strong></a>
+                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=3&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>กำลังซ่อม</strong></a>
                                         </div>
                                     </div>
                             </div>
@@ -128,7 +128,7 @@
                                             <!-- <span class="svg-icon svg-icon-3x svg-icon-success"><i class='bx bxs-cog bx-lg'></i></span> -->
                                             <!-- พักการซ่อม -->
                                             <div class="text-dark font-weight-bolder font-size-h2 mt-3"><?php echo $numb_pause;?></div>
-                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=2&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>พักการซ่อม</strong></a>
+                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=4&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>พักการซ่อม</strong></a>
                                         </div>
                                     </div>
                             </div>
@@ -140,7 +140,7 @@
                                             <!-- <span class="svg-icon svg-icon-3x svg-icon-success"><i class='bx bxs-car-mechanic bx-lg'></i></span> -->
                                             <!-- ส่งซ่อมภายนอก -->
                                             <div class="text-dark font-weight-bolder font-size-h2 mt-3"><?php echo $numb_add_out;?></div>
-                                            <a href="././dashboard.php?module=repairout&page=main" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>ส่งซ่อมภายนอก</strong></a>
+                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=5&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>ส่งซ่อมภายนอก</strong></a>
                                         </div>
                                     </div>
                             </div>
@@ -152,7 +152,7 @@
                                             <!-- <span class="svg-icon svg-icon-3x svg-icon-success"><i class='bx bxs-car-mechanic bx-lg'></i></span> -->
                                             <!-- ส่งกลับจากภายนอก -->
                                             <div class="text-dark font-weight-bolder font-size-h2 mt-3"><?php echo $numb_add_come;?></div>
-                                            <a href="././dashboard.php?module=repairout&page=main" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>ส่งกลับจากภายนอก</strong></a>
+                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=6&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>ส่งกลับจากภายนอก</strong></a>
                                         </div>
                                     </div>
                             </div>
@@ -164,7 +164,7 @@
                                             <!-- <span class="svg-icon svg-icon-3x svg-icon-success"><i class='bx bxs-select-multiple bx-lg'></i></span> -->
                                             <!-- ยกเลิกการซ่อม -->
                                             <div class="text-dark font-weight-bolder font-size-h2 mt-3"><?php echo $numb_cancel;?></div>
-                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=3&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>ยกเลิกการซ่อม</strong></a>
+                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=7&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>ยกเลิกการซ่อม</strong></a>
                                         </div>
                                     </div>
                             </div>
@@ -176,7 +176,7 @@
                                             <!-- <span class="svg-icon svg-icon-3x svg-icon-success"><i class='bx bxs-select-multiple bx-lg'></i></span> -->
                                             <!-- ซ่อมเสร็จ -->
                                             <div class="text-dark font-weight-bolder font-size-h2 mt-3"><?php echo $numb_finish_repair;?></div>
-                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=3&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>ซ่อมเสร็จ</strong></a>
+                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=8&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>ซ่อมเสร็จ</strong></a>
                                         </div>
                                     </div>
                             </div>
@@ -188,7 +188,7 @@
                                             <!-- <span class="svg-icon svg-icon-3x svg-icon-success"><i class='bx bx-calendar bx-lg'></i></span> -->
                                             <!-- ปิดงานซ่อม -->
                                             <div class="text-dark font-weight-bolder font-size-h2 mt-3"><?php echo $numb_close_work;?></div>
-                                            <a href="<?php echo $repair_today ?>" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>ปิดงานซ่อม</strong></a>
+                                            <a href="././dashboard.php?act=&module=repair&page=main&startdate=&enddate=&status=9&search=" class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3"><strong>ปิดงานซ่อม</strong></a>
                                         </div>
                                     </div>
                             </div>

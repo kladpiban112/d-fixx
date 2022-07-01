@@ -367,9 +367,9 @@ if($action == "edit"){
 								
 
                                     <?php if($row_person['img_profile'] == ""){?>
-                                         <img src="uploads/no-image.jpg" alt="image"/>
+                                         <img id="img" src="uploads/no-image.jpg" alt="image"/>
                                         <?php }else{?>
-                                            <img src="uploads/person/<?php echo $row_person['img_profile'];?>" alt="image"/>
+                                            <img id="img" src="uploads/person/<?php echo $row_person['img_profile'];?>" alt="image"/>
                                         <?php   } ?>
 
 
@@ -487,6 +487,8 @@ var tambon = $("#txt_tambon").val();
 
 }	
 
+
+
 function lineAlert(action){
     if(action == 'add'){
         var org_id = $("#org_id").val();
@@ -503,6 +505,40 @@ function lineAlert(action){
             } // success
         });
     }
+}	
+
+function getoptselect_amphur_selected(changwatcode,ampur,tambon){
+
+    $.ajax({
+    type: "POST",
+    url: "core/fn-get-ampur.php",
+    //dataType: "json",
+    data: {changwatcode:changwatcode,ampur:ampur},
+    success: function(data) {
+    
+        $("#ampur").empty();
+        $("#ampur").append(data);
+        
+    } // success
+});
+}	
+
+function getoptselect_tambon_selected(changwatcode,ampurcode,tambon){
+
+    var ampur = $("#txt_ampur").val();
+
+        $.ajax({
+        type: "POST",
+        url: "core/fn-get-tambon.php",
+        //dataType: "json",
+        data: {changwatcode:changwatcode,ampurcode:ampurcode,ampur:ampur,tambon:tambon},
+        success: function(data) {
+            
+                $("#tambon").empty();
+                $("#tambon").append(data);
+            } // success
+    });
+
 }	
 
 
@@ -577,7 +613,7 @@ $('#btnSave').click(function(e){
                 timer: 1500
                 })
                     .then((value) => {
-                    // lineAlert(data.action);
+                    lineAlert(data.action);
                     window.location.replace("dashboard.php?module=repair&page=repair-add-data&personid="+data.personid+"&repairid="+data.repairid+"&act="+data.act);
                     
                 }); 
@@ -600,6 +636,60 @@ $('#btnSave').click(function(e){
         });
         }
       }); //  click
+
+ $('#cidSearch').click(function(e){
+        e.preventDefault();       
+		var data = new FormData(this.form);
+        $.ajax({
+            type: "POST",
+            url: "core/repair/person-get-data.php",
+            dataType: "json",
+			data: data,
+			processData: false,
+            contentType: false,
+            success: function(data) {  
+              if (data.code == "200") {
+                Swal.fire({
+                icon: 'success',
+                title: 'สำเร็จ',
+                showConfirmButton: false,
+                timer: 1500
+                })
+                    .then((value) => {
+                    $('#fname').val(data.data['fname']);
+                    $('#prename').val(data.data['prename']);
+                    $('#lname').val(data.data['lname']);
+                    $('#comp_name').val(data.data['comp_name']);
+                    $('#comp_code').val(data.data['comp_code']);
+                    $('#telephone').val(data.data['telephone']);
+                    $('#email').val(data.data['email']);
+                    $('#house').val(data.data['house']);
+                    $('#community').val(data.data['community']);
+                    $('#road').val(data.data['road']);
+                    $('#village').val(data.data['village']);
+                    $( "#changwat" ).val(data.data['changwat']).change();
+                    if(data.data['img_profile']!=null){$("#img").attr("src", "uploads/person/"+data.data['img_profile']);}else{$("#img").attr("src", "uploads/no-image.jpg")}
+		    getoptselect_tambon_selected(data.data['changwat'],data.data['ampur'],data.data['tambon']);
+                    getoptselect_amphur_selected(data.data['changwat'],data.data['ampur'],data.data['tambon']);		
+                }); 
+                } else if (data.code == "404") {
+                  //swal("ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง")
+                   Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่มีข้อมูล',
+                    text: 'กรุณาลองใหม่อีกครั้ง'
+                    })
+                    .then((value) => {
+                      //liff.closeWindow();
+                  });
+                }
+
+            },error: function (jqXHR, exception) {
+                console.log(jqXHR);
+                // Your error handling logic here..
+            } // success
+        });
+        }); //  click
 
 </script>
 

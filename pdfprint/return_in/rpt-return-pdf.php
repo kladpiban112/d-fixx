@@ -229,6 +229,7 @@ mpdf-->
                             $eq_name = $row['eq_name'];
                             $eq_others = $row['eq_others'];
                             $cost = $row['cost'];
+			if($cost == null){$cost=0.00;}	
                     ?>
 
     <hr>
