@@ -510,7 +510,6 @@ $Prev_Page = $pagenum - 1;
         </div>
     </div>
 
-
 </div>
 <!--end::Card-->
 
