@@ -145,7 +145,7 @@ if ($status != '') {
 
             $max = ' LIMIT '.($pagenum - 1) * $page_rows.','.$page_rows;
 
-            $sql = 'SELECT u.*,p.*,o.org_shortname ,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,u.qt_status
+            $sql = 'SELECT u.*,p.*,us.*,o.org_shortname ,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,u.qt_status
         FROM '.DB_PREFIX.'repair_main u 
         LEFT JOIN '.DB_PREFIX.'org_main o ON u.org_id = o.org_id 
         LEFT JOIN '.DB_PREFIX.'repair_type t ON u.repair_type = t.repair_typeid
@@ -153,6 +153,7 @@ if ($status != '') {
         LEFT JOIN '.DB_PREFIX.'cprename pr ON p.prename = pr.id_prename
         LEFT JOIN '.DB_PREFIX.'equipment_main e ON u.eq_id = e.oid
         LEFT JOIN '.DB_PREFIX."repair_status_type st ON u.repair_status = st.status_typeid
+        LEFT JOIN ".DB_PREFIX."users us ON u.add_users = us.user_id
         WHERE u.flag != 0 AND u.repair_inout = 'I'  $conditions $search_data  $repairdate_data $status_data
         ORDER BY u.repair_id DESC
         $max";
@@ -170,15 +171,15 @@ if ($status != '') {
                         <!-- <th>qrcode</th> -->
                         <th>เลขที่แจ้งซ่อม</th>
                         <th>วันที่แจ้งซ่อม</th>
+                        <th>ผ่านมาแล้ว</th>
                         <th>รูปแบบการซ่อม</th>
                         <th>ประเภทแจ้งซ่อม</th>
                         <th>อุปกรณ์</th>
                         <th>อาการแจ้งซ่อม</th>
                         <th>ผู้แจ้ง</th>
                         <th>อนุมัติซ่อม</th>
-                        <th>สถานะซ่อม</th>
-                        <th>ค่าซ่อม</th>
-                        <th>รับคืน</th>
+                         <th>สถานะซ่อม</th>
+                        <th>ผู้รับแจ้ง</th>
                         <th class="text-center">จัดการ</th>
                     </tr>
                 </thead>
@@ -205,6 +206,8 @@ if ($status != '') {
                 $birthdate = date_db_2form($row['birthdate']);
                 $img_profile = $row['img_profile'];
                 $telephone = $row['telephone'];
+                $user_name = $row['name'];
+
 
                 $repair_date = date_db_2form($row['repair_date']);
                 $repairtype = $row['repair_type'];
@@ -214,10 +217,13 @@ if ($status != '') {
                 $eq_id = $row['eq_id'];
                 $eq_code = $row['eq_code'];
                 $status_title = $row['status_title'];
+                $status_typeid = $row['status_typeid'];
 
                 $repair_status = $row['repair_status'];
                 $repair_inout = $row['repair_inout'];
                 $repair_inout_flag = $row['flag_out'];
+                $d1=strtotime($row['repair_date']);
+				$d2=ceil((time()-$d1)/60.5/60/24);
                 
                 if ($repair_status != '5') {
                     $repair_inout_show = "<i class='fas fa-tools text-success'></i>";
@@ -282,15 +288,33 @@ if ($status != '') {
                             </td> -->
                         <td class="text-center"><?php echo $repair_code; ?></td>
                         <td><?php echo $repair_date; ?></td>
+                        <td>				
+													<?php 
+												if($d2 < 7){  ?>
+															<h4><span class="badge bg-success"><?php echo  $d2." วัน" ;?></span></h4>
+															<?php }
+												elseif ( $d2 >7 && $d2 == 15 ) { ?>
+															<h4><span class="badge bg-warning"><?php echo  $d2." วัน" ;?></span></h4>
+															<?php }
+												elseif ( $d2 >15 ) { ?>
+															<h4><span class="badge bg-danger"><?php echo  $d2." วัน" ;?></span></h4>
+															<?php }
+													?>
+												 
+												</td>
                         <td class="text-center"><?php echo $repair_inout_show; ?></td>
                         <td><?php echo $repair_typetitle; ?></td>
                         <td><?php echo $eq_name; ?></br><small>รหัส : <?php echo $eq_code; ?></small></td>
                         <td><?php echo $repair_title; ?></td>
                         <td><?php echo $fullname; ?></br><small>โทรศัพท์ : <?php echo $telephone; ?></small></td>
                         <td class="text-center"><?php echo $qt_status_show; ?></td>
-                        <td><?php echo $status_title; ?></td>
-                        <td><?php echo $cost; ?></td>
-                        <td class="text-center"><?php echo $return_status; ?></td>
+                        <td><?php echo $status_title; ?>
+                    
+                    
+                    
+                    </td>
+
+                        <td><?php echo $user_name; ?></td>  
                         <td class="text-center">
                             <!--begin::Dropdown-->
                             <div class="dropdown">
