@@ -113,12 +113,12 @@ if($action == "edit"){
 			</div>
 			<div class="col-lg-5">
 				<label>ชื่อ</label>
-				<input type="text" class="form-control"  name="fname" id="fname" placeholder="ชื่อ" value="<?php echo $row_person['fname'];?>"/>
+				<input type="text" class="form-control"  name="sfname" id="sfname" placeholder="ชื่อ" value="<?php echo $row_person['sfname'];?>"/>
 				
 			</div>
 			<div class="col-lg-5">
 				<label>สกุล</label>
-				<input type="text" class="form-control"  name="lname" id="lname" placeholder="สกุล" value="<?php echo $row_person['lname'];?>"/>
+				<input type="text" class="form-control"  name="slname" id="slname" placeholder="สกุล" value="<?php echo $row_person['slname'];?>"/>
 				
 			</div>
 			
@@ -450,14 +450,14 @@ $('#btnSavePerson').click(function(e){
                     showConfirmButton: false,
                     timer: 1000
                     });
-        }else if ($('#fname').val().length == ""){
+        }else if ($('#sfname').val().length == ""){
                 Swal.fire({
                     icon: 'error',
                     title: 'กรุณาระบุชื่อ',
                     showConfirmButton: false,
                     timer: 1000
                     });
-        }else if ($('#lname').val().length == ""){
+        }else if ($('#slname').val().length == ""){
                 Swal.fire({
                     icon: 'error',
                     title: 'กรุณาระบุนามสกุล',

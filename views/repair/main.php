@@ -145,7 +145,7 @@ if ($status != '') {
 
             $max = ' LIMIT '.($pagenum - 1) * $page_rows.','.$page_rows;
 
-            $sql = 'SELECT u.*,p.*,us.*,o.org_shortname ,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,u.qt_status
+            $sql = 'SELECT u.*,p.*,us.name,rp.*,o.org_shortname ,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,u.qt_status
         FROM '.DB_PREFIX.'repair_main u 
         LEFT JOIN '.DB_PREFIX.'org_main o ON u.org_id = o.org_id 
         LEFT JOIN '.DB_PREFIX.'repair_type t ON u.repair_type = t.repair_typeid
@@ -154,6 +154,9 @@ if ($status != '') {
         LEFT JOIN '.DB_PREFIX.'equipment_main e ON u.eq_id = e.oid
         LEFT JOIN '.DB_PREFIX."repair_status_type st ON u.repair_status = st.status_typeid
         LEFT JOIN ".DB_PREFIX."users us ON u.add_users = us.user_id
+        LEFt JOIN ".DB_PREFIX."repair_place rp ON u.repair_place = rp.place_id
+        
+
         WHERE u.flag != 0 AND u.repair_inout = 'I'  $conditions $search_data  $repairdate_data $status_data
         ORDER BY u.repair_id DESC
         $max";
@@ -218,12 +221,16 @@ if ($status != '') {
                 $eq_code = $row['eq_code'];
                 $status_title = $row['status_title'];
                 $status_typeid = $row['status_typeid'];
+                $place_name = $row['place_title'];
+
 
                 $repair_status = $row['repair_status'];
                 $repair_inout = $row['repair_inout'];
                 $repair_inout_flag = $row['flag_out'];
                 $d1=strtotime($row['repair_date']);
 				$d2=ceil((time()-$d1)/60.5/60/24);
+                $status_typeid = $row['repair_status'];
+
                 
                 if ($repair_status != '5') {
                     $repair_inout_show = "<i class='fas fa-tools text-success'></i>";
@@ -303,12 +310,23 @@ if ($status != '') {
 												 
 												</td>
                         <td class="text-center"><?php echo $repair_inout_show; ?></td>
-                        <td><?php echo $repair_typetitle; ?></td>
+                        <td><?php echo $repair_typetitle;?> </br> <?php echo $place_name;?></td>
                         <td><?php echo $eq_name; ?></br><small>รหัส : <?php echo $eq_code; ?></small></td>
                         <td><?php echo $repair_title; ?></td>
                         <td><?php echo $fullname; ?></br><small>โทรศัพท์ : <?php echo $telephone; ?></small></td>
                         <td class="text-center"><?php echo $qt_status_show; ?></td>
-                        <td><?php echo $status_title; ?>
+                        <td> <?php 
+												if($status_typeid == 8 || $status_typeid ==9 ){  ?>
+                                                
+															<h4><span class="badge bg-success">  <?php echo $status_title; ?></span></h4>
+															<?php }
+												elseif ( $status_typeid < 7  ) { ?>
+															<h4><span class="badge bg-warning"> <?php echo $status_title; ?></span></h4>
+															<?php }
+												elseif ( $status_typeid == 7  ) { ?>
+															<h4><span class="badge bg-danger"> <?php echo $status_title; ?></span></h4>
+															<?php }
+													?>    </td>
                     
                     
                     

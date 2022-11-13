@@ -808,7 +808,7 @@ if ($action == 'edit') {
                                                 $stmt_user_role->execute();
                                                 while ($row = $stmt_user_role->fetch(PDO::FETCH_ASSOC)) {
                                                     $role_id_selected = $row['oid'];
-                                                    $role_title_selected = ' '.stripslashes($row['fname']).' '.stripslashes($row['lname']).' ('.stripslashes($row['nickname']).')'; ?>
+                                                    $role_title_selected = ' '.stripslashes($row['sfname']).' '.stripslashes($row['slname']).' ('.stripslashes($row['nickname']).')'; ?>
 
                                 <div class="col-lg-3">
 

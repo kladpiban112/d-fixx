@@ -281,7 +281,7 @@
 
     
         
-    $stmt_data = $conn->prepare ("SELECT u.*,p.*,us.*,o.org_shortname ,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,pm.cost,pm.cost_payment,pm.cost_success
+    $stmt_data = $conn->prepare ("SELECT u.*,p.*,us.name,rp.*,rs.staff_id,sm.*,o.org_shortname ,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,pm.cost,pm.cost_payment,pm.cost_success
     FROM ".DB_PREFIX."repair_main u 
     LEFT JOIN ".DB_PREFIX."org_main o ON u.org_id = o.org_id 
     LEFT JOIN ".DB_PREFIX."repair_type t ON u.repair_type = t.repair_typeid
@@ -291,6 +291,13 @@
     LEFT JOIN ".DB_PREFIX."repair_status_type st ON u.repair_status = st.status_typeid
     LEFT JOIN ".DB_PREFIX."repair_payment pm ON u.repair_id = pm.repair_id
 	LEFT JOIN ".DB_PREFIX."users us ON u.add_users = us.user_id
+	LEFt JOIN ".DB_PREFIX."repair_place rp ON u.repair_place = rp.place_id
+	LEFT JOIN  ".DB_PREFIX."repair_staff rs ON u.repair_id = rs.service_id
+	LEFT JOIN  ".DB_PREFIX."staff_main sm ON rs.staff_id = sm.oid 
+
+	
+
+
     WHERE u.flag != 0  $conditions
     ORDER BY u.repair_id DESC LIMIT 10");
     $stmt_data->execute();		
@@ -313,7 +320,7 @@
 		                                        <th>อาการแจ้งซ่อม</th>
 		                                        <th>ชื่อลูกค้า</th>
 		                                        <th>หน่วยงาน</th>
-												<th>ผู้รับแจ้ง</th>
+												<th>ผู้ปฏิบัติ</th>
 		                                        <th>สถานะ</th>
 		                                      
 		                                        <th class="text-center">จัดการ</th>
@@ -337,7 +344,7 @@
                 $fname = $row['fname'];
                 $lname = $row['lname'];
                 $fullname = $prename.$fname." ".$lname;
-                $cid = $row['cid'];
+                $telephone = $row['telephone'];
                 $org_name = $row['org_name'];
                 $org_shortname = $row['org_shortname'];
                 $birthdate = date_db_2form($row['birthdate']);
@@ -354,6 +361,8 @@
                 $comp_name = $row['comp_name'];
 				$user_name = $row['name'];
 				$status_typeid = $row['repair_status'];
+				$place_name = $row['place_title'];
+				$staff_name = $row['sfname'].' '.$row['slname'].'';
 
 				
 				$d1=strtotime($row['repair_date']);
@@ -416,17 +425,17 @@
 															<h4><span class="badge bg-danger"><?php echo  $d2." วัน" ;?></span></h4>
 															<?php }
 													?>
-												 
+												
 												</td>
-		                                        <td><?php echo $repair_typetitle;?></td>
+		                                        <td><?php echo $repair_typetitle;?> </br> <?php echo $place_name;?></td>
 		                                        <td><?php echo $comp_name; ?></td>
 		                                        <td><?php echo $eq_name;?></br><small>รหัส : <?php echo $eq_code;?></small>
 		                                        </td>
 		                                        <td><?php echo $repair_title;?></td>
-		                                        <td><?php echo $fullname;?></br><small>เลขบัตร : <?php echo $cid;?></small>
+		                                        <td><?php echo $fullname;?></br><small>เบอร์ติดต่อ : <?php echo $telephone;?></small>
 		                                        </td>
-		                                        <td><?php echo $org_shortname;?></td>
-		                                        <td><?php echo $user_name; ?></td>
+		                                        <td></td>
+		                                        <td><?php echo $staff_name; ?></td>
 
 
 

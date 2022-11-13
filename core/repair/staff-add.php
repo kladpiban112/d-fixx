@@ -14,8 +14,8 @@ $personid = filter_input(INPUT_POST, 'personid', FILTER_SANITIZE_STRING);
 $cid = filter_input(INPUT_POST, 'cid', FILTER_SANITIZE_STRING);
 $org_id = filter_input(INPUT_POST, 'org_id', FILTER_SANITIZE_STRING);
 $prename = filter_input(INPUT_POST, 'prename', FILTER_SANITIZE_STRING);
-$fname = filter_input(INPUT_POST, 'fname', FILTER_SANITIZE_STRING);
-$lname = filter_input(INPUT_POST, 'lname', FILTER_SANITIZE_STRING);
+$fname = filter_input(INPUT_POST, 'sfname', FILTER_SANITIZE_STRING);
+$lname = filter_input(INPUT_POST, 'slname', FILTER_SANITIZE_STRING);
 $sex = filter_input(INPUT_POST, 'sex', FILTER_SANITIZE_STRING);
 $telephone = filter_input(INPUT_POST, 'telephone', FILTER_SANITIZE_STRING);
 $birthdate = filter_input(INPUT_POST, 'birthdate', FILTER_SANITIZE_STRING);
@@ -56,13 +56,13 @@ if($exist_person!=0){
 	
 	$personid = $row['oid'];
 	
-	$query = "UPDATE ".DB_PREFIX."staff_main SET cid = ?, org_id = ?, prename = ?, fname = ?, lname = ?, sex = ?,birthdate = ?,telephone = ?,house = ?,community = ?,road = ?,village = ?,tambon = ?,ampur = ?,changwat = ?,flag = ?,edit_date = ?,edit_users = ?,nickname = ? , startdate = ? , outdate = ? ,out_desc = ? WHERE oid = ? LIMIT 1"; 
+	$query = "UPDATE ".DB_PREFIX."staff_main SET cid = ?, org_id = ?, prename = ?, sfname = ?, slname = ?, sex = ?,birthdate = ?,telephone = ?,house = ?,community = ?,road = ?,village = ?,tambon = ?,ampur = ?,changwat = ?,flag = ?,edit_date = ?,edit_users = ?,nickname = ? , startdate = ? , outdate = ? ,out_desc = ? WHERE oid = ? LIMIT 1"; 
 	$stmt = $conn->prepare($query);
 	$stmt->bindParam(1, $cid, PDO::PARAM_STR);
 	$stmt->bindParam(2, $org_id, PDO::PARAM_STR);
 	$stmt->bindParam(3, $prename, PDO::PARAM_STR);
-	$stmt->bindParam(4, $fname);
-	$stmt->bindParam(5, $lname, PDO::PARAM_STR);
+	$stmt->bindParam(4, $sfname);
+	$stmt->bindParam(5, $slname, PDO::PARAM_STR);
 	$stmt->bindParam(6, $sex, PDO::PARAM_INT);
 	$stmt->bindParam(7, $birthdate, PDO::PARAM_STR);
 	$stmt->bindParam(8, $telephone, PDO::PARAM_STR);
@@ -119,13 +119,13 @@ if($exist_person!=0){
 }else{
 
 
-$query = "INSERT INTO ".DB_PREFIX."staff_main (oid, cid, org_id, prename, fname, lname, sex,birthdate,telephone,house,community,road,village,tambon,ampur,changwat,flag,add_date,add_users,nickname,startdate,outdate,out_desc) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,?,? ,? ,? ,?)"; 
+$query = "INSERT INTO ".DB_PREFIX."staff_main (oid, cid, org_id, prename, sfname, slname, sex,birthdate,telephone,house,community,road,village,tambon,ampur,changwat,flag,add_date,add_users,nickname,startdate,outdate,out_desc) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,?,? ,? ,? ,?)"; 
 $stmt = $conn->prepare($query);
 $stmt->bindParam(1, $cid, PDO::PARAM_STR);
 $stmt->bindParam(2, $org_id, PDO::PARAM_STR);
 $stmt->bindParam(3, $prename, PDO::PARAM_STR);
-$stmt->bindParam(4, $fname);
-$stmt->bindParam(5, $lname, PDO::PARAM_STR);
+$stmt->bindParam(4, $sfname);
+$stmt->bindParam(5, $slname, PDO::PARAM_STR);
 $stmt->bindParam(6, $sex, PDO::PARAM_INT);
 $stmt->bindParam(7, $birthdate, PDO::PARAM_STR);
 $stmt->bindParam(8, $telephone, PDO::PARAM_STR);
@@ -192,13 +192,13 @@ if($_FILES['img_profile']['name'])
 }else if($act == 'edit'){
 
 
-$query = "UPDATE ".DB_PREFIX."staff_main SET cid = ?, org_id = ?, prename = ?, fname = ?, lname = ?, sex = ?,birthdate = ?,telephone = ?,house = ?,community = ?,road = ?,village = ?,tambon = ?,ampur = ?,changwat = ?,flag = ?,edit_date = ?,edit_users = ?,nickname = ? , startdate = ? , outdate = ? ,out_desc = ? WHERE oid = ? LIMIT 1"; 
+$query = "UPDATE ".DB_PREFIX."staff_main SET cid = ?, org_id = ?, prename = ?, sfname = ?, slname = ?, sex = ?,birthdate = ?,telephone = ?,house = ?,community = ?,road = ?,village = ?,tambon = ?,ampur = ?,changwat = ?,flag = ?,edit_date = ?,edit_users = ?,nickname = ? , startdate = ? , outdate = ? ,out_desc = ? WHERE oid = ? LIMIT 1"; 
 $stmt = $conn->prepare($query);
 $stmt->bindParam(1, $cid, PDO::PARAM_STR);
 $stmt->bindParam(2, $org_id, PDO::PARAM_STR);
 $stmt->bindParam(3, $prename, PDO::PARAM_STR);
-$stmt->bindParam(4, $fname);
-$stmt->bindParam(5, $lname, PDO::PARAM_STR);
+$stmt->bindParam(4, $sfname);
+$stmt->bindParam(5, $slname, PDO::PARAM_STR);
 $stmt->bindParam(6, $sex, PDO::PARAM_INT);
 $stmt->bindParam(7, $birthdate, PDO::PARAM_STR);
 $stmt->bindParam(8, $telephone, PDO::PARAM_STR);
