@@ -292,9 +292,9 @@
     LEFT JOIN ".DB_PREFIX."repair_payment pm ON u.repair_id = pm.repair_id
 	LEFT JOIN ".DB_PREFIX."users us ON u.add_users = us.user_id
 	LEFt JOIN ".DB_PREFIX."repair_place rp ON u.repair_place = rp.place_id
-	LEFT JOIN  ".DB_PREFIX."repair_staff rs ON u.repair_id = rs.service_id
+	LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_staff WHERE add_date IN (SELECT max(add_date) FROM repair_staff GROUP BY service_id )) AS rs ON u.repair_id = rs.service_id
 	LEFT JOIN  ".DB_PREFIX."staff_main sm ON rs.staff_id = sm.oid
-	LEFT JOIN  ".DB_PREFIX."repair_status rt ON u.repair_id = rt.repair_id
+	LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_status WHERE add_date IN (SELECT max(add_date) FROM repair_status GROUP BY repair_id )) AS rt ON u.repair_id = rt.repair_id
 
     WHERE u.flag != 0  $conditions
     ORDER BY u.repair_id DESC LIMIT 10");
