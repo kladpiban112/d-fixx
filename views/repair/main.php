@@ -145,7 +145,7 @@ if ($status != '') {
 
             $max = ' LIMIT '.($pagenum - 1) * $page_rows.','.$page_rows;
 
-            $sql = 'SELECT u.*,p.*,us.name,rp.*,o.org_shortname ,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,u.qt_status
+            $sql = 'SELECT u.*,p.*,us.name,rp.*,o.org_shortname ,rt.status_date,rs.staff_id,sm.*,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,u.qt_status
         FROM '.DB_PREFIX.'repair_main u 
         LEFT JOIN '.DB_PREFIX.'org_main o ON u.org_id = o.org_id 
         LEFT JOIN '.DB_PREFIX.'repair_type t ON u.repair_type = t.repair_typeid
@@ -155,6 +155,9 @@ if ($status != '') {
         LEFT JOIN '.DB_PREFIX."repair_status_type st ON u.repair_status = st.status_typeid
         LEFT JOIN ".DB_PREFIX."users us ON u.add_users = us.user_id
         LEFt JOIN ".DB_PREFIX."repair_place rp ON u.repair_place = rp.place_id
+        LEFT JOIN  ".DB_PREFIX."repair_staff rs ON u.repair_id = rs.service_id
+	    LEFT JOIN  ".DB_PREFIX."staff_main sm ON rs.staff_id = sm.oid 
+        LEFT JOIN  ".DB_PREFIX."repair_status rt ON u.repair_id = rt.repair_id
         
 
         WHERE u.flag != 0 AND u.repair_inout = 'I'  $conditions $search_data  $repairdate_data $status_data
@@ -175,14 +178,13 @@ if ($status != '') {
                         <th>เลขที่แจ้งซ่อม</th>
                         <th>วันที่แจ้งซ่อม</th>
                         <th>ผ่านมาแล้ว</th>
-                        <th>รูปแบบการซ่อม</th>
                         <th>ประเภทแจ้งซ่อม</th>
                         <th>อุปกรณ์</th>
                         <th>อาการแจ้งซ่อม</th>
                         <th>ผู้แจ้ง</th>
-                        <th>อนุมัติซ่อม</th>
+                        <th>วันที่ออกปฏิบัติงาน</th>
                          <th>สถานะซ่อม</th>
-                        <th>ผู้รับแจ้ง</th>
+                        <th>ผู้ปฏิบัติงาน</th>
                         <th class="text-center">จัดการ</th>
                     </tr>
                 </thead>
@@ -210,6 +212,8 @@ if ($status != '') {
                 $img_profile = $row['img_profile'];
                 $telephone = $row['telephone'];
                 $user_name = $row['name'];
+                $staff_name = $row['sfname'].' '.$row['slname'].'';
+
 
 
                 $repair_date = date_db_2form($row['repair_date']);
@@ -230,6 +234,8 @@ if ($status != '') {
                 $d1=strtotime($row['repair_date']);
 				$d2=ceil((time()-$d1)/60.5/60/24);
                 $status_typeid = $row['repair_status'];
+                $status_date = date_db_2form($row['status_date']);
+
 
                 
                 if ($repair_status != '5') {
@@ -295,7 +301,7 @@ if ($status != '') {
                             </td> -->
                         <td class="text-center"><?php echo $repair_code; ?></td>
                         <td><?php echo $repair_date; ?></td>
-                        <td>				
+                        <td class="text-center">				
 													<?php 
 												if($d2 < 7){  ?>
 															<h4><span class="badge bg-success"><?php echo  $d2." วัน" ;?></span></h4>
@@ -309,13 +315,12 @@ if ($status != '') {
 													?>
 												 
 												</td>
-                        <td class="text-center"><?php echo $repair_inout_show; ?></td>
                         <td><?php echo $repair_typetitle;?> </br> <?php echo $place_name;?></td>
                         <td><?php echo $eq_name; ?></br><small>รหัส : <?php echo $eq_code; ?></small></td>
                         <td><?php echo $repair_title; ?></td>
                         <td><?php echo $fullname; ?></br><small>โทรศัพท์ : <?php echo $telephone; ?></small></td>
-                        <td class="text-center"><?php echo $qt_status_show; ?></td>
-                        <td> <?php 
+                        <td class="text-center"><?php echo $status_date; ?></td>
+                        <td class="text-center"> <?php 
 												if($status_typeid == 8 || $status_typeid ==9 ){  ?>
                                                 
 															<h4><span class="badge bg-success">  <?php echo $status_title; ?></span></h4>
@@ -332,7 +337,7 @@ if ($status != '') {
                     
                     </td>
 
-                        <td><?php echo $user_name; ?></td>  
+                        <td><?php echo $staff_name; ?></td>  
                         <td class="text-center">
                             <!--begin::Dropdown-->
                             <div class="dropdown">

@@ -281,7 +281,7 @@
 
     
         
-    $stmt_data = $conn->prepare ("SELECT u.*,p.*,us.name,rp.*,rs.staff_id,sm.*,o.org_shortname ,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,pm.cost,pm.cost_payment,pm.cost_success
+    $stmt_data = $conn->prepare ("SELECT u.*,p.*,us.name,rp.*,rs.staff_id,sm.*,rt.status_date,o.org_shortname ,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,pm.cost,pm.cost_payment,pm.cost_success
     FROM ".DB_PREFIX."repair_main u 
     LEFT JOIN ".DB_PREFIX."org_main o ON u.org_id = o.org_id 
     LEFT JOIN ".DB_PREFIX."repair_type t ON u.repair_type = t.repair_typeid
@@ -293,10 +293,8 @@
 	LEFT JOIN ".DB_PREFIX."users us ON u.add_users = us.user_id
 	LEFt JOIN ".DB_PREFIX."repair_place rp ON u.repair_place = rp.place_id
 	LEFT JOIN  ".DB_PREFIX."repair_staff rs ON u.repair_id = rs.service_id
-	LEFT JOIN  ".DB_PREFIX."staff_main sm ON rs.staff_id = sm.oid 
-
-	
-
+	LEFT JOIN  ".DB_PREFIX."staff_main sm ON rs.staff_id = sm.oid
+	LEFT JOIN  ".DB_PREFIX."repair_status rt ON u.repair_id = rt.repair_id
 
     WHERE u.flag != 0  $conditions
     ORDER BY u.repair_id DESC LIMIT 10");
@@ -319,8 +317,8 @@
 		                                        <th>อุปกรณ์</th>
 		                                        <th>อาการแจ้งซ่อม</th>
 		                                        <th>ชื่อลูกค้า</th>
-		                                        <th>หน่วยงาน</th>
-												<th>ผู้ปฏิบัติ</th>
+		                                        <th>วันที่ออกปฏิบัติงาน</th>
+												<th>ผู้ปฏิบัติงาน</th>
 		                                        <th>สถานะ</th>
 		                                      
 		                                        <th class="text-center">จัดการ</th>
@@ -363,6 +361,7 @@
 				$status_typeid = $row['repair_status'];
 				$place_name = $row['place_title'];
 				$staff_name = $row['sfname'].' '.$row['slname'].'';
+				$status_date = date_db_2form($row['status_date']);
 
 				
 				$d1=strtotime($row['repair_date']);
@@ -412,7 +411,7 @@
 		                                       
 		                                        <td class="text-center"><?php echo $repair_code;?></td>
 		                                        <td><?php echo $repair_date;?></td>
-												  <td>
+												  <td class="text-center">
 													
 													<?php 
 												if($d2 < 7){  ?>
@@ -434,12 +433,12 @@
 		                                        <td><?php echo $repair_title;?></td>
 		                                        <td><?php echo $fullname;?></br><small>เบอร์ติดต่อ : <?php echo $telephone;?></small>
 		                                        </td>
-		                                        <td></td>
+		                                        <td><?php echo $status_date ; ?></td>
 		                                        <td><?php echo $staff_name; ?></td>
 
 
 
-												<td> <?php 
+												<td class="text-center"> <?php 
 												if($status_typeid == 8 || $status_typeid ==9 ){  ?>
                                                 
 															<h4><span class="badge bg-success">  <?php echo $status_title; ?></span></h4>
