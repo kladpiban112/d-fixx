@@ -205,7 +205,7 @@ if ($action == 'view') {
                     //$repairid = filter_input(INPUT_POST, 'repairid', FILTER_SANITIZE_STRING);
 
                     $conditions = " AND u.repair_id = '$repairid' ";
-                    $stmt_data = $conn->prepare('SELECT u.*,s.status_title,st.fname,st.lname,st.nickname
+                    $stmt_data = $conn->prepare('SELECT u.*,s.status_title,st.sfname,st.slname,st.nickname
                     FROM '.DB_PREFIX.'repair_status u 
                     LEFT JOIN  '.DB_PREFIX.'repair_status_type s ON u.status_id = s.status_typeid
                     LEFT JOIN  '.DB_PREFIX."staff_main st ON u.staff_id = st.oid 
@@ -240,9 +240,9 @@ if ($action == 'view') {
             $status_date = date_db_2form($row['status_date']);
             $status_title = $row['status_title'];
             $status_desc = $row['status_desc'];
-            $staff_name = $row['prename_title'].$row['fname'].' '.$row['lname'].' ('.$row['nickname'].')';
+            $staff_name = $row['prename_title'].$row['sfname'].' '.$row['slname'].' ('.$row['nickname'].')';
 
-            $stmt_detail = $conn->prepare("SELECT GROUP_CONCAT(s.fname,' ',s.lname) AS gstaff_name,GROUP_CONCAT(s.oid) AS gstaff_id
+            $stmt_detail = $conn->prepare("SELECT GROUP_CONCAT(s.sfname,' ',s.slname) AS gstaff_name,GROUP_CONCAT(s.oid) AS gstaff_id
                 FROM ".DB_PREFIX.'repair_staff u 
                 LEFT JOIN  '.DB_PREFIX."staff_main s ON u.staff_id = s.oid
                 WHERE u.status_id = '$oid' ");

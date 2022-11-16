@@ -249,7 +249,7 @@ mpdf-->
                     //$repairid = filter_input(INPUT_POST, 'repairid', FILTER_SANITIZE_STRING);
 
                     $conditions = " AND u.repair_id = '$repairid' ";
-                    $stmt_data = $conn->prepare('SELECT u.*,s.status_title,st.fname,st.lname,st.nickname
+                    $stmt_data = $conn->prepare('SELECT u.*,s.status_title,st.sfname,st.slname,st.nickname
                     FROM '.DB_PREFIX.'repair_status u 
                     LEFT JOIN  '.DB_PREFIX.'repair_status_type s ON u.status_id = s.status_typeid
                     LEFT JOIN  '.DB_PREFIX."staff_main st ON u.staff_id = st.oid 

@@ -69,7 +69,18 @@ $numb_rows = $stmt_data->rowCount();
                 <td class="text-center" width="20px"><?php echo $i; ?></td>
 
                 <td><?php echo $status_date; ?></td>
-                <td><?php echo $status_title; ?></td>
+                <td class="text-center"> <?php 
+												if($status_typeid == 8 || $status_typeid ==9 ){  ?>
+                                                
+															<h5><span class="badge bg-success">  <?php echo $status_title; ?></span></h5>
+															<?php }
+												elseif ( $status_typeid < 7  ) { ?>
+															<h5><span class="badge bg-warning"> <?php echo $status_title; ?></span></h5>
+															<?php }
+												elseif ( $status_typeid == 7  ) { ?>
+															<h5><span class="badge bg-danger"> <?php echo $status_title; ?></span></h5>
+															<?php }
+													?>    </td>
                 <td><?php echo $gstaff_name; ?></td>
                 <td><?php echo $status_desc; ?></td>
                 <td class="text-center">

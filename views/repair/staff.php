@@ -2,50 +2,53 @@
 error_reporting(0);
 $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_STRING);
 if($search != ""){
-    $search_data = " AND s.cid LIKE '%$search%' OR s.fname LIKE '%$search%'  ";
+    $search_data = " AND s.cid LIKE '%$search%' OR s.sfname LIKE '%$search%'  ";
 }
 
 ?>
-		<!--begin::Card-->
-		<div class="card card-custom gutter-b example example-compact">
-			<div class="card-header">
-				<h3 class="card-title">
-                <i class="fas fa-users-cog"></i>&nbsp;ข้อมูลช่าง 
-				</h3>
-				<div class="card-toolbar">
-					<div class="example-tools justify-content-center">
-						<a href="dashboard.php?module=repair&page=staff-add" class="btn btn-success btn-sm font-weight-bold mr-2" title="บันทึกช่าง"><i class="fa fa-plus-circle" title="บันทึกช่าง" data-toggle="tooltip"></i>บันทึกช่าง</a>
-					</div>
-				</div>
-			</div>
+<!--begin::Card-->
+<div class="card card-custom gutter-b example example-compact">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-users-cog"></i>&nbsp;ข้อมูลช่าง
+        </h3>
+        <div class="card-toolbar">
+            <div class="example-tools justify-content-center">
+                <a href="dashboard.php?module=repair&page=staff-add"
+                    class="btn btn-success btn-sm font-weight-bold mr-2" title="บันทึกช่าง"><i class="fa fa-plus-circle"
+                        title="บันทึกช่าง" data-toggle="tooltip"></i>บันทึกช่าง</a>
+            </div>
+        </div>
+    </div>
 
 
 
-	<div class="card-body">
+    <div class="card-body">
 
-    <form class="form" enctype="multipart/form-data" method="GET">
-    <input type="hidden" class="form-control"  value="search"/>
-    <input type="hidden" class="form-control"  name="module"  value="<?php echo $module;?>"/>
-    <input type="hidden" class="form-control"  name="page" value="staff"/>
+        <form class="form" enctype="multipart/form-data" method="GET">
+            <input type="hidden" class="form-control" value="search" />
+            <input type="hidden" class="form-control" name="module" value="<?php echo $module;?>" />
+            <input type="hidden" class="form-control" name="page" value="staff" />
 
-    <div class="form-group row">
-    
+            <div class="form-group row">
 
-             <div class="col-lg-3">
-				<label>เลขบัตรประชาชน/ชื่อสกุล</label>
-				<div class="input-group">
-							<input type="text" class="form-control" placeholder="เลขบัตรประชาชน/ชื่อสกุล"  name="search" id="search"  value="<?php echo $search;?>"/>
-							<div class="input-group-append">
-								<button class="btn btn-primary" type="submit" ><i class="fas fa-search"></i></button>
-							</div>
-						</div>
-			</div>
+
+                <div class="col-lg-3">
+                    <label>เลขบัตรประชาชน/ชื่อสกุล</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="เลขบัตรประชาชน/ชื่อสกุล" name="search"
+                            id="search" value="<?php echo $search;?>" />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
-    </form> 
+        </form>
 
-    <?php
+        <?php
        if($logged_user_role_id == '1'){
         $conditions = " ";
     }else{
@@ -101,10 +104,10 @@ if($search != ""){
 
 
 
-<div class="table-responsive">
-	<table class="table table-bordered table-hover table-strip" id="tbData" style="margin-top: 13px !important">
-    <thead>
-    <tr>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-strip" id="tbData" style="margin-top: 13px !important">
+                <thead>
+                    <tr>
                         <th class="text-center">ลำดับ</th>
                         <th>โปรไฟล์</th>
                         <th>ชื่อ-สกุล</th>
@@ -113,12 +116,12 @@ if($search != ""){
                         <th>วันที่เริ่มทำงาน</th>
                         <th>หน่วยงาน</th>
                         <th class="text-center">สถานะ</th>
-                        <th class="text-center">จัดการ</th>	
-    </tr>
-    </thead>
-    <tbody>
-            
-            <?php
+                        <th class="text-center">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <?php
 
             $i  = 0;
             while ($row = $stmt_data->fetch(PDO::FETCH_ASSOC))
@@ -145,42 +148,45 @@ if($search != ""){
 
 
                 ?>
-                <tr>
-                            <td class="text-center"><?php echo $i;?></td>
-                            <td class="text-center"><div class="symbol symbol-50 symbol-lg-60">
-                            <?php if($img_profile == ""){?>
-                                <img src="uploads/equipment/no-image.jpg" alt="image"/>
-                            <?php }else{?>
-                                <img src="uploads/staff/<?php echo $img_profile;?>" alt="image"/>
+                    <tr>
+                        <td class="text-center"><?php echo $i;?></td>
+                        <td class="text-center">
+                            <div class="symbol symbol-50 symbol-lg-60">
+                                <?php if($img_profile == ""){?>
+                                <img src="uploads/equipment/no-image.jpg" alt="image" />
+                                <?php }else{?>
+                                <img src="uploads/staff/<?php echo $img_profile;?>" alt="image" />
                                 <?php   } ?>
-                </div></td>
-                            <td><?php echo $fullname;?>
+                            </div>
+                        </td>
+                        <td><?php echo $fullname;?>
                             </br><small>ชื่อเล่น : <?php echo $nickname;?></small>
                             </br><small>เลขบัตร : <?php echo $cid;?></small></td>
-                            <td><?php echo $telephone;?></td>
-                            <td ><?php echo $addr;?></td>
-                            <td><?php echo $startdate;?></td>
-                            <td><?php echo $org_name;?></td>
-                            
-                            <td class="text-center">
+                        <td><?php echo $telephone;?></td>
+                        <td><?php echo $addr;?></td>
+                        <td><?php echo $startdate;?></td>
+                        <td><?php echo $org_name;?></td>
+
+                        <td class="text-center">
                             <?php if($flag == '1'){ ?>
                             <span class="label label-lg label-light-success label-inline">ปฏิบัติงาน</span>
                             <?php }else if($flag == '2'){ ?>
-                                <span class="label label-lg label-light-danger label-inline">ลาออก</span>
+                            <span class="label label-lg label-light-danger label-inline">ลาออก</span>
                             <?php } ?>
-                            
-                            </td>
-                            <td class="text-center">
+
+                        </td>
+                        <td class="text-center">
                             <!--begin::Dropdown-->
-                                <div class="dropdown">
-                                    <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
-                                        <i class="ki ki-bold-more-hor font-size-md"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                                        <!--begin::Navigation-->
+                            <div class="dropdown">
+                                <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
+                                    <i class="ki ki-bold-more-hor font-size-md"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                    <!--begin::Navigation-->
                                     <ul class="navi navi-hover py-1">
                                         <li class="navi-item">
-                                            <a href="dashboard.php?module=repair&page=staff-add&id=<?php echo $personid_enc;?>&act=<?php echo base64_encode('edit');?>" class="navi-link">
+                                            <a href="dashboard.php?module=repair&page=staff-add&id=<?php echo $personid_enc;?>&act=<?php echo base64_encode('edit');?>"
+                                                class="navi-link">
                                                 <span class="navi-icon"><i class="fas fa-edit"></i></span>
                                                 <span class="navi-text">แก้ไข</span>
                                             </a>
@@ -196,26 +202,26 @@ if($search != ""){
                                         </li> -->
                                     </ul>
                                     <!--end::Navigation-->
-                                    </div>
                                 </div>
-                <!--end::Dropdown-->
-                            </td>
-                    
-                </tr>
+                            </div>
+                            <!--end::Dropdown-->
+                        </td>
 
-            <?php 
+                    </tr>
+
+                    <?php 
             } // end while
             ?>
-            </tbody>
+                </tbody>
             </table>
         </div>
-  
-
-<div class="d-flex justify-content-between align-items-center flex-wrap">
-    <div class="d-flex flex-wrap py-2 mr-3">
 
 
-<?php 
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div class="d-flex flex-wrap py-2 mr-3">
+
+
+                <?php 
 $p = 4;	//	กำหนดช่วงตัวเลขทางซ้าย และ ขวา ของหน้าที่ถูกเลือก
 $Prev_Page = $pagenum-1;
 $Next_Page = $pagenum+1;
@@ -297,29 +303,26 @@ else if($Num_Pages!=1 && $Num_Pages!=2)	//	กรณีไม่ได้เล�
 
 
 
-    </div>
+            </div>
 
-    <div class="d-flex align-items-center py-3">
-        <span class="text-muted">หน้า <?php echo $pagenum;?> / <?php echo $last;?> </span>
-    </div>
-</div>
+            <div class="d-flex align-items-center py-3">
+                <span class="text-muted">หน้า <?php echo $pagenum;?> / <?php echo $last;?> </span>
+            </div>
+        </div>
 
 
-            
-<?php
+
+        <?php
 					} // end if
 					?>
-		
-	</div>
-	<div class="card-footer">
-		<div class="row">
-			
-		</div>
-	</div>
+
+    </div>
+    <div class="card-footer">
+        <div class="row">
+
+        </div>
+    </div>
 
 
 </div>
-		<!--end::Card-->
-
-
-
+<!--end::Card-->

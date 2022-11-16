@@ -164,14 +164,14 @@ if($exist_person!=0){
 		//line_text($txt_newjob,$line_token_key);
 
 		// set BarcodeQR object
-		$qr = new BarcodeQR();
+		// $qr = new BarcodeQR();
 
-		// create URL QR code
-		// $eq_id_enc = base64_encode($eq_id);
-		$qr->url(ADMIN_URL."/public/qrcode-repair/index.php?serviceid=$service_oid_enc");
+		// // create URL QR code
+		// // $eq_id_enc = base64_encode($eq_id);
+		// $qr->url(ADMIN_URL."/public/qrcode-repair/index.php?serviceid=$service_oid_enc");
 
-		// display new QR code image
-		$qr->draw(300, "../../uploads/qrcode-repair/$service_oid");
+		// // display new QR code image
+		// $qr->draw(300, "../../uploads/qrcode-repair/$service_oid");
 
 
 	

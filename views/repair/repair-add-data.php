@@ -18,14 +18,20 @@ if ($action == 'edit') {
     $stmt_data->execute();
     $row_person = $stmt_data->fetch(PDO::FETCH_ASSOC);
 
-    $sql_service = 'SELECT s.*,qts.qt_statusname FROM '.DB_PREFIX.'repair_main s 
+    $sql_service = 'SELECT s.*,qts.qt_statusname,st.* FROM '.DB_PREFIX.'repair_main s 
 	LEFT JOIN '.DB_PREFIX.'person_main p ON s.person_id = p.oid 
     LEFT JOIN '.DB_PREFIX."repair_quotation_status qts ON s.qt_status = qts.qt_statusid
+    LEFT JOIN ".DB_PREFIX."repair_status_type st ON s.repair_status = st.status_typeid
+
     WHERE s.repair_id = '$repairid' AND s.flag != '0'  LIMIT 1";
     $stmt_service = $conn->prepare($sql_service);
     $stmt_service->execute();
     $row_service = $stmt_service->fetch(PDO::FETCH_ASSOC);
-    $qt_status = $row_service['qt_status'];
+    $qt_status = $row_service['qt_status']; 
+    $status_typeid = $row_service['repair_status'];
+    $status_title = $row_service['status_title'];
+
+
 
     $stmt_qt = $conn->prepare('SELECT u.* FROM '.DB_PREFIX."repair_quotation u 
         WHERE u.flag != '0' AND u.repair_id = '$repairid' 
@@ -39,6 +45,7 @@ if ($action == 'edit') {
     $txt_title = 'เพิ่ม';
     $action = 'add';
 }
+
 ?>
 
 
@@ -47,10 +54,26 @@ if ($action == 'edit') {
     <div class="card-header ribbon ribbon-right">
         <div class="ribbon-target bg-danger" style="top: 10px; right: -2px;">2</div>
         <h3 class="card-title">
-            <i class="fas fa-list"></i>&nbsp;<?php echo $txt_title; ?>รายละเอียดแจ้งซ่อม เลขที่ :
-            <?php echo $row_service['repair_code']; ?>
+            <i class="fas fa-list"></i>&nbsp;&nbsp; <?php echo $txt_title; ?>รายละเอียดแจ้งซ่อม เลขที่ :
+            <?php echo $row_service['repair_code']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+            สถานะปัจุบัน :   &nbsp;&nbsp;
+            <?php 
+                    if($status_typeid == 8 || $status_typeid ==9 ){  ?>
+                                                            
+                        <span class="badge bg-success">  <?php echo $status_title; ?></span><?php }
+                    elseif ( $status_typeid < 7  ) { ?>
+                        <span class="badge bg-warning"> <?php echo $status_title; ?></span><?php }
+                    elseif ( $status_typeid == 7  ) { ?>
+                        <span class="badge bg-danger"> <?php echo $status_title; ?></span><?php }
+            ?> 
+
         </h3>
+       
+        
+        
         <div class="card-toolbar">
+            
             <div class="example-tools justify-content-center">
                 <a href="dashboard.php?module=<?php echo $module; ?>"
                     class="btn btn-defalse btn-sm font-weight-bold mr-2" title="ย้อนกลับ"><i class="fa fa-chevron-left"
@@ -66,6 +89,8 @@ if ($action == 'edit') {
         <input type="hidden" class="form-control" name="personid" id="personid" value="<?php echo $personid; ?>" />
         <input type="hidden" class="form-control" name="org_id" id="org_id"
             value="<?php echo $row_service['org_id']; ?>" />
+
+            
         <div class="card-body">
 
 

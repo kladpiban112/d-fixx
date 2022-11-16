@@ -238,12 +238,12 @@ mpdf-->
     </span>
     <!-- <table width="100%" style="border:1px solid #000000; margin-top: 13px !important"> -->
     <table class="items" width="100%" style="font-size: 14pt;border-collapse: collapse; " cellpadding="8">
-    <thead>
-                        </thead>
-    <tbody>
-            <tr >
+        <thead>
+        </thead>
+        <tbody>
+            <tr>
                 <th width="20%" style="text-align: left;">อุปกรณ์</th>
-                <td  colspan="5" style="text-align: center;"><?php echo $eq_name; ?></td>
+                <td colspan="5" style="text-align: center;"><?php echo $eq_name; ?></td>
             </tr>
             <tr>
                 <th style="text-align: left;">รายการแจ้งซ่อม</th>
@@ -256,24 +256,24 @@ mpdf-->
             <tr>
                 <th style="text-align: left;">อุปกรณ์ที่นำมาด้วย</th>
                 <td colspan="5" style="text-align: center;"><?php echo $eq_others; ?></td>
-            </tr>   
-            <tfooter>
-            <tr>
-                <td style="text-align: center;" class="blanktotal" colspan="5">
-                    ค่าใช้จ่าย</td>
-
-                <td class="totals">
-                    <?php echo $cost; ?></td>
             </tr>
-            </tbody>
+            <tfooter>
+                <tr>
+                    <td style="text-align: center;" class="blanktotal" colspan="5">
+                        ค่าใช้จ่าย</td>
+
+                    <td class="totals">
+                        <?php echo $cost; ?></td>
+                </tr>
+        </tbody>
         </tfooter>
-            <?php
+        <?php
         } // end while
     } else {?>
-            <tr>
-                <td class="text-center" height="50px" colspan="6">ไม่มีข้อมูล</td>
-            </tr>
-            <?php } 
+        <tr>
+            <td class="text-center" height="50px" colspan="6">ไม่มีข้อมูล</td>
+        </tr>
+        <?php } 
             ?>
 
     </table>
@@ -282,7 +282,7 @@ mpdf-->
                     //$repairid = filter_input(INPUT_POST, 'repairid', FILTER_SANITIZE_STRING);
 
                     $conditions = " AND u.repair_id = '$repairid' ";
-                    $stmt_data = $conn->prepare('SELECT u.*,s.status_title,st.fname,st.lname,st.nickname
+                    $stmt_data = $conn->prepare('SELECT u.*,s.status_title,st.sfname,st.slname,st.nickname
                     FROM '.DB_PREFIX.'repair_status u 
                     LEFT JOIN  '.DB_PREFIX.'repair_status_type s ON u.status_id = s.status_typeid
                     LEFT JOIN  '.DB_PREFIX."staff_main st ON u.staff_id = st.oid 
@@ -317,9 +317,9 @@ mpdf-->
             $status_date = date_db_2form($row['status_date']);
             $status_title = $row['status_title'];
             $status_desc = $row['status_desc'];
-            $staff_name = $row['prename_title'].$row['fname'].' '.$row['lname'].' ('.$row['nickname'].')';
+            $staff_name = $row['prename_title'].$row['sfname'].' '.$row['slname'].' ('.$row['nickname'].')';
 
-            $stmt_detail = $conn->prepare("SELECT GROUP_CONCAT(s.fname,' ',s.lname) AS gstaff_name,GROUP_CONCAT(s.oid) AS gstaff_id
+            $stmt_detail = $conn->prepare("SELECT GROUP_CONCAT(s.sfname,' ',s.slname) AS gstaff_name,GROUP_CONCAT(s.oid) AS gstaff_id
                 FROM ".DB_PREFIX.'repair_staff u 
                 LEFT JOIN  '.DB_PREFIX."staff_main s ON u.staff_id = s.oid
                 WHERE u.status_id = '$oid' ");
@@ -372,12 +372,12 @@ mpdf-->
     </div>
     <!-- end: Invoice footer-->
     <div>
-           <br> </br>
+        <br> </br>
     </div>
     <table width="100%" hight="10%" style="font-size: 14pt; border-collapse: collapse;" cellpadding="3">
-        <tr >
+        <tr>
             <td width="50%" style="border: 0 mm solid #888888; ">
-       
+
             </td>
 
             <td width="20%" style="border: 0 mm solid #888888;">
@@ -390,7 +390,9 @@ mpdf-->
                 <br>ลงชื่อผู้รับ</br>
                 <br>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</br>
                 <br><?php echo $approve_username; ?></br>
-                <br>วันที่รับ : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ </br>
+                <br>วันที่รับ :
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/
+                </br>
                 <br><?php echo $approve_date; ?></br>
             </td>
 

@@ -155,9 +155,9 @@ if ($status != '') {
         LEFT JOIN '.DB_PREFIX."repair_status_type st ON u.repair_status = st.status_typeid
         LEFT JOIN ".DB_PREFIX."users us ON u.add_users = us.user_id
         LEFt JOIN ".DB_PREFIX."repair_place rp ON u.repair_place = rp.place_id
-        LEFT JOIN  ".DB_PREFIX."repair_staff rs ON u.repair_id = rs.service_id
+	    LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_staff WHERE add_date IN (SELECT max(add_date) FROM repair_staff GROUP BY service_id )) AS rs ON u.repair_id = rs.service_id
 	    LEFT JOIN  ".DB_PREFIX."staff_main sm ON rs.staff_id = sm.oid 
-        LEFT JOIN  ".DB_PREFIX."repair_status rt ON u.repair_id = rt.repair_id
+	    LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_status WHERE add_date IN (SELECT max(add_date) FROM repair_status GROUP BY repair_id )) AS rt ON u.repair_id = rt.repair_id
         
 
         WHERE u.flag != 0 AND u.repair_inout = 'I'  $conditions $search_data  $repairdate_data $status_data
@@ -183,7 +183,7 @@ if ($status != '') {
                         <th>อาการแจ้งซ่อม</th>
                         <th>ผู้แจ้ง</th>
                         <th>วันที่ออกปฏิบัติงาน</th>
-                         <th>สถานะซ่อม</th>
+                        <th>สถานะซ่อม</th>
                         <th>ผู้ปฏิบัติงาน</th>
                         <th class="text-center">จัดการ</th>
                     </tr>
@@ -226,6 +226,8 @@ if ($status != '') {
                 $status_title = $row['status_title'];
                 $status_typeid = $row['status_typeid'];
                 $place_name = $row['place_title'];
+                $place_id = $row['place_id'];
+
 
 
                 $repair_status = $row['repair_status'];
@@ -299,45 +301,59 @@ if ($status != '') {
                                 
                             <?php } ?>
                             </td> -->
-                        <td class="text-center"><?php echo $repair_code; ?></td>
+                        <td class="text-center">
+                            <a
+                                href="dashboard.php?module=repair&page=repair-add-data&repairid=<?php echo $repairid_enc;?>&personid=<?php echo $personid_enc;?>&act=<?php echo base64_encode('edit');?>">
+                                <?php echo $repair_code;?>
+                            </a>
+                        </td>
                         <td><?php echo $repair_date; ?></td>
-                        <td class="text-center">				
-													<?php 
+                        <td class="text-center">
+                            <?php 
 												if($d2 < 7){  ?>
-															<h4><span class="badge bg-success"><?php echo  $d2." วัน" ;?></span></h4>
-															<?php }
+                            <h4><span class="badge bg-success"><?php echo  $d2." วัน" ;?></span></h4>
+                            <?php }
 												elseif ( $d2 >7 && $d2 == 15 ) { ?>
-															<h4><span class="badge bg-warning"><?php echo  $d2." วัน" ;?></span></h4>
-															<?php }
+                            <h4><span class="badge bg-warning"><?php echo  $d2." วัน" ;?></span></h4>
+                            <?php }
 												elseif ( $d2 >15 ) { ?>
-															<h4><span class="badge bg-danger"><?php echo  $d2." วัน" ;?></span></h4>
-															<?php }
+                            <h4><span class="badge bg-danger"><?php echo  $d2." วัน" ;?></span></h4>
+                            <?php }
 													?>
-												 
-												</td>
-                        <td><?php echo $repair_typetitle;?> </br> <?php echo $place_name;?></td>
+
+                        </td>
+                        <td><?php echo $repair_typetitle;?> </br> <?php 
+												if($place_id == 1){  ?>
+                            <span class="badge bg-success"><?php echo  $place_name ;?></span>
+                            <?php }
+												elseif ( $place_id == 2 ) { ?>
+                            <span class="badge bg-warning"><?php echo  $place_name ;?></span>
+                            <?php }
+															?>
+                        </td>
                         <td><?php echo $eq_name; ?></br><small>รหัส : <?php echo $eq_code; ?></small></td>
                         <td><?php echo $repair_title; ?></td>
                         <td><?php echo $fullname; ?></br><small>โทรศัพท์ : <?php echo $telephone; ?></small></td>
                         <td class="text-center"><?php echo $status_date; ?></td>
                         <td class="text-center"> <?php 
 												if($status_typeid == 8 || $status_typeid ==9 ){  ?>
-                                                
-															<h4><span class="badge bg-success">  <?php echo $status_title; ?></span></h4>
-															<?php }
-												elseif ( $status_typeid < 7  ) { ?>
-															<h4><span class="badge bg-warning"> <?php echo $status_title; ?></span></h4>
-															<?php }
-												elseif ( $status_typeid == 7  ) { ?>
-															<h4><span class="badge bg-danger"> <?php echo $status_title; ?></span></h4>
-															<?php }
-													?>    </td>
-                    
-                    
-                    
-                    </td>
 
-                        <td><?php echo $staff_name; ?></td>  
+                            <h4><span class="badge bg-success"> <?php echo $status_title; ?></span></h4>
+                            <?php }
+												elseif ( $status_typeid < 7  ) { ?>
+                            <h4><span class="badge bg-warning"> <?php echo $status_title; ?></span></h4>
+                            <?php }
+												elseif ( $status_typeid == 7  ) { ?>
+                            <h4><span class="badge bg-danger"> <?php echo $status_title; ?></span></h4>
+                            <?php }
+													?>
+                        </td>
+
+
+
+                        </td>
+
+                        <td><?php echo $staff_name; ?></td>
                         <td class="text-center">
                             <!--begin::Dropdown-->
                             <div class="dropdown">
@@ -391,8 +407,8 @@ if ($status != '') {
                                             </a>
                                         </li> -->
 
-                                        <li class="navi-separator my-3"></li>   
-                                       <?php if($repair_inout == 'I' && $repair_inout_flag == '1') {?>
+                                        <li class="navi-separator my-3"></li>
+                                        <?php if($repair_inout == 'I' && $repair_inout_flag == '1') {?>
                                         <li class="navi-item">
                                             <a href="dashboard.php?module=repairout&page=main&refid=<?php echo $repairid_enc; ?> "
                                                 class="navi-link">
@@ -449,7 +465,7 @@ if ($status != '') {
                                         </li>
                                     </ul> -->
                                     <ul class="navi navi-hover py-1">
-                                    <li class="navi-item">
+                                        <li class="navi-item">
                                             <a href="dashboard.php?module=repairout&page=main&refid=<?php echo $repairid_enc; ?> "
                                                 class="navi-link">
                                                 <span class="navi-icon"><i class="fas fa-cogs"></i></span>
