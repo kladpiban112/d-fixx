@@ -453,13 +453,13 @@
 		                                        <td class="text-center">
 
 		                                            <?php 
-												if($d2 < 7){  ?>
+												if($d2 <=7 ){  ?>
 		                                            <h4><span class="badge bg-success"><?php echo  $d2." วัน" ;?></span></h4>
 		                                            <?php }
-												elseif ( $d2 >7 && $d2 == 15 ) { ?>
+												elseif ( $d2 >=8  &&  $d2 <= 15  ) { ?>
 		                                            <h4><span class="badge bg-warning"><?php echo  $d2." วัน" ;?></span></h4>
 		                                            <?php }
-												elseif ( $d2 >15 ) { ?>
+												elseif ( $d2 > 15 ) { ?>
 		                                            <h4><span class="badge bg-danger"><?php echo  $d2." วัน" ;?></span></h4>
 		                                            <?php }
 													?>
@@ -477,7 +477,11 @@
 		                                        <td><?php echo $comp_name; ?></td>
 		                                        <td><?php echo $eq_name;?></br><small>รหัส : <?php echo $eq_code;?></small>
 		                                        </td>
-		                                        <td><?php echo $repair_title;?></td>
+		                                        <td>
+													<a href="dashboard.php?module=repair&page=repair-print&personid=<?php echo $personid_enc;?>&repairid=<?php echo $repairid_enc;?>&act=<?php echo base64_encode('view');?>"
+		                                                                class="navi-link">
+		                                                               <?php echo $repair_title;?>
+		                                                            </a></td>
 		                                        <td><?php echo $fullname;?></br><small>เบอร์ติดต่อ :
 		                                                <?php echo $telephone;?></small>
 		                                        </td>

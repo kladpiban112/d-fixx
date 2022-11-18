@@ -14,6 +14,7 @@ if ($action == 'view') {
     $stmt_data = $conn->prepare('SELECT p.*,o.org_name,pr.prename FROM '.DB_PREFIX.'person_main p 
     LEFT JOIN '.DB_PREFIX.'org_main o ON p.org_id = o.org_id 
     LEFT JOIN '.DB_PREFIX."cprename pr ON p.prename = pr.id_prename
+    
     WHERE p.oid = '$personid'  LIMIT 1");
     $stmt_data->execute();
     $row_person = $stmt_data->fetch(PDO::FETCH_ASSOC);
@@ -23,10 +24,14 @@ if ($action == 'view') {
     $telephone = $row_person['telephone'];
     $person_type = $row_person['person_type'];  // 1 บุคคล 2 บริษัท
     $comp_name = $row_person['comp_name'];
+    $org_code = $row_person['org_code'];
 
-    $sql_service = 'SELECT s.*,t.repair_typetitle FROM '.DB_PREFIX.'repair_main s 
+    $sql_service = 'SELECT s.*,t.repair_typetitle,rs.staff_id,sm.*,rt.status_date FROM '.DB_PREFIX.'repair_main s 
     LEFT JOIN '.DB_PREFIX.'person_main p ON s.person_id = p.oid
     LEFT JOIN  '.DB_PREFIX."repair_type t ON s.repair_type = t.repair_typeid
+    LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_staff WHERE add_date IN (SELECT max(add_date) FROM repair_staff GROUP BY service_id )) AS rs ON s.repair_id = rs.service_id
+	LEFT JOIN  ".DB_PREFIX."staff_main sm ON rs.staff_id = sm.oid
+	LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_status WHERE add_date IN (SELECT max(add_date) FROM repair_status GROUP BY repair_id )) AS rt ON s.repair_id = rt.repair_id
     WHERE s.repair_id = '$repairid' AND s.flag != '0'  LIMIT 1";
     $stmt_service = $conn->prepare($sql_service);
     $stmt_service->execute();
@@ -42,6 +47,9 @@ if ($action == 'view') {
 
     $return_date = date_db_2form($row_service['return_date']);
     $return_username = $row_service['return_username'];
+   $staff_name = $row_service['sfname'].' '.$row_service['slname'].'';
+   	$status_date = date_db_2form($row_service['status_date']);
+
 } else {
 }
 ?>
@@ -76,8 +84,12 @@ if ($action == 'view') {
                             <!--end::Logo-->
                             <span class=" d-flex flex-column align-items-md-end opacity-70">
                                 <h5><?php echo getOrgName($row_person['org_id']); ?></h5>
-                                <span><?php echo getOrgAddr($row_person['org_id']); ?></span>
+                                <span><?php echo getOrgAddr($row_person['org_id']); ?> <?php echo getOrgPostcode($row_person['org_id']); ?></span>
                                 <span>โทรศัพท์ <?php echo getOrgTelephone($row_person['org_id']); ?></span>
+                                <span> เลขประจำตัวผู้เสียภาษี  <?php echo getOrgTax($row_person['org_id']); ?></span>
+                               
+                                
+                            </span>
                             </span>
                         </div>
                     </div>
@@ -88,7 +100,8 @@ if ($action == 'view') {
                         <div class="d-flex flex-column flex-root">
                             <span class="font-weight-bolder mb-2">ผู้แจ้ง</span>
                             <span class="opacity-70"><?php echo $fullname; ?></span>
-                            <span class="opacity-70">บริษัท : <?php echo $comp_name; ?></span>
+                            <span class="opacity-70">รหัสลูกค้า : <?php echo $org_code; ?></span>
+                            <span class="opacity-70">หน่วยงาน : <?php echo $comp_name; ?></span>
                             <span class="opacity-70">เลขที่บัตรประชาชน/เลขผู้เสียภาษี : <?php echo $cid; ?></span>
                             <span class="opacity-70">โทรศัพท์ : <?php echo $telephone; ?></span>
                             <span class="opacity-70">ที่อยู่ : <?php  echo getPersonAddr($personid); ?></span>
@@ -103,13 +116,15 @@ if ($action == 'view') {
 
                         <div class="d-flex flex-column flex-root">
                             <span class="font-weight-bolder mb-2">ผู้รับแจ้ง</span>
-                            <span class="opacity-70 mb-2"><?php echo getUsername($user_add); ?></span>
-                            <span class="font-weight-bolder mb-2">ผู้อนุมัติดำเนินการซ่อม</span>
+                            <span class="opacity-70 mb-2"><?php echo getUsername($user_add)?></span>
+                            <span class="font-weight-bolder mb-2">ผู้ดำเนินการซ่อม</span>
+                            <span class="opacity-70">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;<?php echo $staff_name; ?></span>
                             <span
                                 class="opacity-70">(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</span>
-                            <span class="opacity-70"><?php echo $approve_username; ?></span>
-                            <span class="font-weight-bolder mb-2">วันที่อนุมัติแจ้งซ่อม</span>
-                            <span class="opacity-70"><?php echo $approve_date; ?></span>
+                            <p></p>
+                            <span class="font-weight-bolder mb-2">วันที่ออกซ่อม</span>
+                            <span class="opacity-70"><?php echo $status_date; ?></span>
                         </div>
                     </div>
                 </div>

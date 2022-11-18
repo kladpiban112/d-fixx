@@ -791,7 +791,7 @@ function getEqcode($orgid,$datereceive)
 					$changwatname = $row['changwatname'];
 					$ampurname = $row['ampurname'];
 					$tambonname = $row['tambonname'];
-					$addr =  $org_address." ต.".$tambonname." อ.".$ampurname."&nbsp; จ.".$changwatname;
+					$addr =  $org_address."&nbsp; ต.".$tambonname."&nbsp; อ.".$ampurname."&nbsp;&nbsp; จ.".$changwatname;
 			  }else  {
 				$addr = "";
 			  }
@@ -814,6 +814,35 @@ function getEqcode($orgid,$datereceive)
 			return $org_name;
 		}
 
+		function getOrgTax($orgid){
+			global $conn;
+			  if($orgid != ""){
+				$stmt = $conn->prepare ("SELECT o.* FROM org_main o WHERE o.org_id = ? ");
+					$stmt->execute([$orgid]);
+					$row = $stmt->fetch(PDO::FETCH_ASSOC);
+					$org_name = $row['Tax_id'];
+					
+			  }else  {
+				$org_name = "";
+			  }
+			
+			return $org_name;
+		}
+		function getOrgPostcode($orgid){
+					global $conn;
+					if($orgid != ""){
+						$stmt = $conn->prepare ("SELECT o.* FROM org_main o WHERE o.org_id = ? ");
+							$stmt->execute([$orgid]);
+							$row = $stmt->fetch(PDO::FETCH_ASSOC);
+							$org_name = $row['post_code'];
+							
+					}else  {
+						$org_name = "";
+					}
+					
+					return $org_name;
+		}
+		
 		function getOrgLogo($orgid){
 			global $conn;
 			  if($orgid != ""){

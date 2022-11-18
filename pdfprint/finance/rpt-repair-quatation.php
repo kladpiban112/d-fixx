@@ -36,6 +36,8 @@ if ($action == 'view') {
     $telephone = $row_person['telephone'];
     $person_type = $row_person['person_type'];  // 1 บุคคล 2 บริษัท
     $comp_name = $row_person['comp_name'];
+    $org_code = $row_person['org_code'];
+
 
     $sql_service = 'SELECT s.*,t.repair_typetitle,qt.qt_code,qt.qt_date,qt.qt_price,qt.qt_approvedate,qt.oid AS qt_id ,qt.qt_vat,qt.qt_vatprice,qt.qt_pricetotal,qt.qt_dayexp
     FROM '.DB_PREFIX.'repair_main s 
@@ -170,10 +172,11 @@ if ($action == 'view') {
 <td width="35%" style="color:#0000BB; ">
 
                            
-                            <span>
+                           <span>
                                 <h4><?php echo getOrgName($row_person['org_id']); ?></h4>
-                                <span><?php echo getOrgAddr($row_person['org_id']); ?> </span>
-                                <span>โทรศัพท์ <?php echo getOrgTelephone($row_person['org_id']); ?></span>
+                                <span><h5><?php echo getOrgAddr($row_person['org_id']); ?> <?php echo getOrgPostcode($row_person['org_id']); ?><h5/></span>
+                                <span><h4>โทรศัพท์ <?php echo getOrgTelephone($row_person['org_id']); ?><h4/><p></p>
+                                <h4>เลขประจำตัวผู้เสียภาษี  <?php echo getOrgTax($row_person['org_id']); ?><h4/></span>
                             </span>
 </td>
 </tr>
@@ -189,7 +192,7 @@ Page {PAGENO} of {nb}
 </htmlpagefooter>
 <sethtmlpageheader name="myheader" value="on" show-this-page="1" />
 <sethtmlpagefooter name="myfooter" value="on" />
-mpdf-->
+mpdf--><br/>
     <hr class="border-bottom w-100">
 
     <table width="100%" style="font-size: 14pt; border-collapse: collapse;" cellpadding="3">
@@ -198,10 +201,12 @@ mpdf-->
                 <span style="font-size: 14pt; color: #555555;">ผู้แจ้ง:</span>
 
                 <br><?php echo $fullname; ?></br>
-                <br>บริษัท : <?php echo $comp_name; ?></br>
-                <br>เลขที่บัตรประชาชน/เลขผู้เสียภาษี : <?php echo $cid; ?></br>
-                <br>โทรศัพท์ : <?php echo $telephone; ?></br>
-                <br>ที่อยู่ : <?php  echo getPersonAddr($personid); ?></br>
+                    <br>เลขที่ลูกค้า : <?php echo $org_code; ?></br>
+                    <br>หน่วยงาน : <?php echo $comp_name; ?></br>
+                    <br>ที่อยู่ : <?php  echo getPersonAddr($personid); ?></br>
+                    <br>โทรศัพท์ : <?php echo $telephone; ?></br>
+                    <br>เลขที่บัตรประชาชน/เลขผู้เสียภาษี : <?php echo $cid; ?></br>
+
             </td>
 
             <td width="20%" style="border: 0 mm solid #888888;">
@@ -350,10 +355,7 @@ $mpdf = new \Mpdf\Mpdf([
      $mpdf->SetProtection(['print']);
      $mpdf->SetTitle('DFix Corp. - Repair Quatation');
      $mpdf->SetAuthor('DFix Corp.');
-     $mpdf->SetWatermarkText('Repair Quatation');
-     $mpdf->showWatermarkText = true;
-     $mpdf->watermark_font = 'DejaVuSansCondensed';
-     $mpdf->watermarkTextAlpha = 0.1;
+     
 
 $mpdf->SetDisplayMode('fullpage');
 $mpdf->WriteHTML($html);

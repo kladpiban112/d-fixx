@@ -17,7 +17,7 @@ if (($startdate_ymd != '') and ($enddate_ymd != '')) {
 }
 
 if ($search != '') {
-    $search_data = " AND p.cid LIKE '%$search%' OR p.fname LIKE '%$search%'  ";
+    $search_data = " AND p.cid LIKE '%$search%' OR p.fname LIKE '%$search%' OR u.repair_code LIKE '%$search%' OR p.comp_name LIKE '%$search%'  ";
 }
 /*if($repairdate_ymd != ""){
     $repairdate_data = " AND u.repair_date = '$repairdate_ymd'  ";
@@ -92,9 +92,9 @@ if ($status != '') {
                 </div>
 
                 <div class="col-lg-3">
-                    <label>เลขบัตรประชาชน/ชื่อสกุล</label>
+                    <label>ค้นหาข้อมูล</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="เลขบัตรประชาชน/ชื่อสกุล" name="search"
+                        <input type="text" class="form-control" placeholder="ค้นหาข้อมูล" name="search"
                             id="search" value="<?php echo $search; ?>" />
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
@@ -179,6 +179,7 @@ if ($status != '') {
                         <th>วันที่แจ้งซ่อม</th>
                         <th>ผ่านมาแล้ว</th>
                         <th>ประเภทแจ้งซ่อม</th>
+                        <th>สถานที่แจ้งซ่อม</th>
                         <th>อุปกรณ์</th>
                         <th>อาการแจ้งซ่อม</th>
                         <th>ผู้แจ้ง</th>
@@ -237,6 +238,8 @@ if ($status != '') {
 				$d2=ceil((time()-$d1)/60.5/60/24);
                 $status_typeid = $row['repair_status'];
                 $status_date = date_db_2form($row['status_date']);
+                $comp_name = $row['comp_name'];
+
 
 
                 
@@ -310,13 +313,13 @@ if ($status != '') {
                         <td><?php echo $repair_date; ?></td>
                         <td class="text-center">
                             <?php 
-												if($d2 < 7){  ?>
+												if($d2 <=7 ){  ?>
                             <h4><span class="badge bg-success"><?php echo  $d2." วัน" ;?></span></h4>
                             <?php }
-												elseif ( $d2 >7 && $d2 == 15 ) { ?>
+												elseif ( $d2 >=8  &&  $d2 <= 15  ) { ?>
                             <h4><span class="badge bg-warning"><?php echo  $d2." วัน" ;?></span></h4>
                             <?php }
-												elseif ( $d2 >15 ) { ?>
+												elseif ( $d2 > 15 ) { ?>
                             <h4><span class="badge bg-danger"><?php echo  $d2." วัน" ;?></span></h4>
                             <?php }
 													?>
@@ -331,6 +334,7 @@ if ($status != '') {
                             <?php }
 															?>
                         </td>
+                        <td><?php echo $comp_name;?></td>
                         <td><?php echo $eq_name; ?></br><small>รหัส : <?php echo $eq_code; ?></small></td>
                         <td><?php echo $repair_title; ?></td>
                         <td><?php echo $fullname; ?></br><small>โทรศัพท์ : <?php echo $telephone; ?></small></td>

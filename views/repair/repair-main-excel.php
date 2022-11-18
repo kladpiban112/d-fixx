@@ -37,6 +37,7 @@ if(($startdate_ymd != "") AND ($enddate_ymd != "")){
 if($status != ""){
     $status_data = " AND u.repair_status = '$status'  ";
 }
+error_reporting(0);
 ?>
 
 
@@ -62,8 +63,8 @@ if($status != ""){
                     <!-- begin: Invoice header-->
                     <div class="row justify-content-center py-8 px-8 py-md-27 px-md-0">
                         <div class="col-md-9">
-                            
-                            
+
+
                         </div>
                     </div>
                     <!-- end: Invoice header-->
@@ -82,7 +83,7 @@ if($status != ""){
                     }
                 
 
-                    $stmt_data = $conn->prepare("SELECT u.*,p.*,o.org_shortname ,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title
+                    $stmt_data = $conn->prepare("SELECT u.*,p.*,o.org_shortname ,rs.staff_id,sm.*,rt.status_date,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title
                     FROM ".DB_PREFIX."repair_main u 
                     LEFT JOIN ".DB_PREFIX."org_main o ON u.org_id = o.org_id 
                     LEFT JOIN ".DB_PREFIX."repair_type t ON u.repair_type = t.repair_typeid
@@ -90,6 +91,12 @@ if($status != ""){
                     LEFT JOIN ".DB_PREFIX."cprename pr ON p.prename = pr.id_prename
                     LEFT JOIN ".DB_PREFIX."equipment_main e ON u.eq_id = e.oid
                     LEFT JOIN ".DB_PREFIX."repair_status_type st ON u.repair_status = st.status_typeid
+                    LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_staff WHERE add_date IN (SELECT max(add_date) FROM repair_staff GROUP BY service_id )) AS rs ON u.repair_id = rs.service_id
+                    LEFT JOIN  ".DB_PREFIX."staff_main sm ON rs.staff_id = sm.oid
+                    LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_status WHERE add_date IN (SELECT max(add_date) FROM repair_status GROUP BY repair_id )) AS rt ON u.repair_id = rt.repair_id
+
+
+
                     WHERE u.flag != 0  $conditions $search_data  $repairdate_data $status_data
                     ORDER BY u.repair_id DESC
                     $max");
@@ -102,19 +109,20 @@ if($status != ""){
 
 
                             <thead>
+
                                 <tr>
-                                <th class="text-center">ลำดับ</th>
-                                    <th>รหัสแจ้งซ่อม</th>
+                                    <th class="text-center">ลำดับ</th>
+                                    <th>เลขที่แจ้งซ่อม</th>
                                     <th>วันที่แจ้งซ่อม</th>
+                                    <th>ผ่านมาแล้ว</th>
                                     <th>ประเภทแจ้งซ่อม</th>
-                                    <th>กายอุปกรณ์</th>
+                                    <th>สถานที่</th>
+                                    <th>อุปกรณ์</th>
                                     <th>อาการแจ้งซ่อม</th>
                                     <th>ผู้แจ้ง</th>
-                                    <th>หน่วยงาน</th>
-                                    <th >สถานะ</th>
-                                    <th >รายการอะไหล่</th>
-                                    <th >ค่าซ่อม</th>
-                                    <th >รับคืน</th>
+                                    <th>วันที่ออกปฏิบัติงาน</th>
+                                    <th>สถานะซ่อม</th>
+                                    <th>ผู้ปฏิบัติงาน</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -150,6 +158,14 @@ if($status != ""){
                             $status_title = $row['status_title'];
 
                             $repair_status = $row['repair_status'];
+                            $staff_name = $row['sfname'].' '.$row['slname'].'';
+                            $d1=strtotime($row['repair_date']);
+				            $d2=ceil((time()-$d1)/60.5/60/24);
+                            $comp_name = $row['comp_name'];
+                            $status_date = date_db_2form($row['status_date']);
+
+
+
 
                             $return_date = date_db_2form($row['return_date']);
 
@@ -180,18 +196,18 @@ if($status != ""){
 
 
                                 <tr>
-                                <td class="text-center"><?php echo $i;?></td>
-                                <td class="text-center"><?php echo $repair_code;?></td>
-                                <td><?php echo $repair_date;?></td>
-                                <td><?php echo $repair_typetitle;?></td>
-                                <td><?php echo $eq_name;?></br><small>รหัส : <?php echo $eq_code;?></small></td>
-                                <td><?php echo $repair_title;?></td>
-                                <td><?php echo $fullname;?></br><small>เลขบัตร : <?php echo $cid;?></small></td>
-                                <td><?php echo $org_shortname;?></td>
-                                <td><?php echo $status_title;?></td>
-                                <td><?php echo $spare_detail;?></td>
-                                <td><?php echo $sum_price;?></td>
-                                <td class="text-center"><?php echo $return_status;?></td>
+                                    <td class="text-center"><?php echo $i;?></td>
+                                    <td class="text-center"><?php echo $repair_code;?></td>
+                                    <td><?php echo $repair_date;?></td>
+                                    <td><?php echo  $d2." วัน" ;?></td>
+                                    <td><?php echo $repair_typetitle;?></td>
+                                    <td><?php echo $comp_name;?></td>
+                                    <td><?php echo $eq_name;?></br><small>รหัส : <?php echo $eq_code;?></small></td>
+                                    <td><?php echo $repair_title;?></td>
+                                    <td><?php echo $fullname;?></br><small>เลขบัตร : <?php echo $cid;?></small></td>
+                                    <td class="text-center"><?php echo $status_date; ?></td>
+                                    <td><?php echo $status_title;?></td>
+                                    <td><?php echo $staff_name;?></td>
                                 </tr>
 
                                 <?php
@@ -201,7 +217,8 @@ if($status != ""){
 
 
                                 <tr>
-                                    <td colspan="10" style="text-align: right;">วันที่พิมพ์ <?php echo date("d/m/Y H:i:s");?></td>
+                                    <td colspan="10" style="text-align: right;">วันที่พิมพ์
+                                        <?php echo date("d/m/Y H:i:s");?></td>
                                 </tr>
                             </tbody>
                             <?php

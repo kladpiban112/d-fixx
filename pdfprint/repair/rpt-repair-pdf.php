@@ -35,10 +35,16 @@ if ($action == 'view') {
     $telephone = $row_person['telephone'];
     $person_type = $row_person['person_type'];  // 1 บุคคล 2 บริษัท
     $comp_name = $row_person['comp_name'];
+    $org_code = $row_person['org_code'];
 
-    $sql_service = 'SELECT s.*,t.repair_typetitle FROM '.DB_PREFIX.'repair_main s 
+
+    $sql_service = 'SELECT  s.*,t.repair_typetitle,rs.staff_id,sm.*,rt.status_date FROM '.DB_PREFIX.'repair_main s 
     LEFT JOIN '.DB_PREFIX.'person_main p ON s.person_id = p.oid
     LEFT JOIN  '.DB_PREFIX."repair_type t ON s.repair_type = t.repair_typeid
+    LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_staff WHERE add_date IN (SELECT max(add_date) FROM repair_staff GROUP BY service_id )) AS rs ON s.repair_id = rs.service_id
+	LEFT JOIN  ".DB_PREFIX."staff_main sm ON rs.staff_id = sm.oid
+	LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_status WHERE add_date IN (SELECT max(add_date) FROM repair_status GROUP BY repair_id )) AS rt ON s.repair_id = rt.repair_id
+    
     WHERE s.repair_id = '$repairid' AND s.flag != '0'  LIMIT 1";
     $stmt_service = $conn->prepare($sql_service);
     $stmt_service->execute();
@@ -54,6 +60,8 @@ if ($action == 'view') {
 
     $return_date = date_db_2form($row_service['return_date']);
     $return_username = $row_service['return_username'];
+    $staff_names = $row_service['sfname'].' '.$row_service['slname'].'';
+   	$status_date = date_db_2form($row_service['status_date']);
 } else {
 }
 
@@ -160,14 +168,18 @@ if ($action == 'view') {
                            
                             <span>
                                 <h4><?php echo getOrgName($row_person['org_id']); ?></h4>
-                                <span><?php echo getOrgAddr($row_person['org_id']); ?></span>
-                                <span>โทรศัพท์ <?php echo getOrgTelephone($row_person['org_id']); ?></span>
+                                <span><h5><?php echo getOrgAddr($row_person['org_id']); ?> <?php echo getOrgPostcode($row_person['org_id']); ?><h5/></span>
+                                <span><h4>โทรศัพท์ <?php echo getOrgTelephone($row_person['org_id']); ?><h4/><p></p>
+                                <h4>เลขประจำตัวผู้เสียภาษี  <?php echo getOrgTax($row_person['org_id']); ?><h4/></span>
                             </span>
+                                
 </td>
 </tr>
 </table>
+
 </htmlpageheader>
 <htmlpagefooter name="myfooter">
+                               
 <div style="border-top: 1px solid #000000; font-size: 9pt; text-align: center; padding-top: 3mm; ">
 Page {PAGENO} of {nb}
 </div>
@@ -178,29 +190,32 @@ Page {PAGENO} of {nb}
 <sethtmlpageheader name="myheader" value="on" show-this-page="1" />
 <sethtmlpagefooter name="myfooter" value="on" />
 mpdf-->
-    <hr class="border-bottom w-100">
+ <br />
+        <hr class="border-bottom w-100">
 
-    <table width="100%" style="font-size: 14pt; border-collapse: collapse;" cellpadding="3">
-        <tr>
-            <td width="50%" style="border: 0 mm solid #888888; ">
-                <span style="font-size: 14pt; color: #555555;">ผู้แจ้ง:</span>
+        <table width="100%" style="font-size: 14pt; border-collapse: collapse;" cellpadding="3">
+            <tr>
+                <td width="50%" style="border: 0 mm solid #888888; ">
+                    <span style="font-size: 14pt; color: #555555;">ผู้แจ้ง:</span>
 
-                <br><?php echo $fullname; ?></br>
-                <br>บริษัท : <?php echo $comp_name; ?></br>
-                <br>เลขที่บัตรประชาชน/เลขผู้เสียภาษี : <?php echo $cid; ?></br>
-                <br>โทรศัพท์ : <?php echo $telephone; ?></br>
-                <br>ที่อยู่ : <?php  echo getPersonAddr($personid); ?></br>
-            </td>
+                    <br><?php echo $fullname; ?></br>
+                    <br>เลขที่ลูกค้า : <?php echo $org_code; ?></br>
+                    <br>หน่วยงาน : <?php echo $comp_name; ?></br>
+                    <br>ที่อยู่ : <?php  echo getPersonAddr($personid); ?></br>
+                    <br>โทรศัพท์ : <?php echo $telephone; ?></br>
+                    <br>เลขที่บัตรประชาชน/เลขผู้เสียภาษี : <?php echo $cid; ?></br>
 
-            <td width="20%" style="border: 0 mm solid #888888;">
-                <span style="font-size: 14pt; color: #555555;">วันที่แจ้ง :</span>
+                </td>
 
-                <br><?php echo $repairdate; ?></br><br>
-                <span style="font-size: 14pt; color: #555555;">ประเภทการแจ้ง</span>
-                <br><?php echo $repair_typetitle; ?></br>
-            </td>
+                <td width="20%" style="border: 0 mm solid #888888;">
+                    <span style="font-size: 14pt; color: #555555;">วันที่แจ้ง :</span>
 
-            <!-- <td width="30%" style="border: 0 mm solid #888888;">
+                    <br><?php echo $repairdate; ?></br><br>
+                    <span style="font-size: 14pt; color: #555555;">ประเภทการแจ้ง</span>
+                    <br><?php echo $repair_typetitle; ?></br>
+                </td>
+
+                <!-- <td width="30%" style="border: 0 mm solid #888888;">
                 <span style="font-size: 14pt; color: #555555;">ผู้รับแจ้ง:</span>
 
                 <br><?php echo getUsername($user_add); ?></br>
@@ -211,22 +226,22 @@ mpdf-->
                 <br><?php echo $approve_date; ?></br>
             </td> -->
 
-        </tr>
-    </table>
+            </tr>
+        </table>
 
-    <!-- start div -->
-
-
-
-
-    <!-- begin: Invoice-->
-
-
-    <!-- begin: Invoice body-->
+        <!-- start div -->
 
 
 
-    <?php
+
+        <!-- begin: Invoice-->
+
+
+        <!-- begin: Invoice body-->
+
+
+
+        <?php
                     //$repairid = filter_input(INPUT_POST, 'repairid', FILTER_SANITIZE_STRING);
 
                     $conditions = " AND repair_id = '$repairid' ";
@@ -246,40 +261,40 @@ mpdf-->
                             $eq_others = $row['eq_others'];
                     ?>
 
-    <hr>
-    <span style="font-size: 14pt;">
-        รายการแจ้งซ่อม
-    </span>
-    <!-- <table width="100%" style="border:1px solid #000000; margin-top: 13px !important"> -->
-    <table class="items" width="100%" style="font-size: 14pt;border-collapse: collapse; " cellpadding="8">
-        <tr>
-            <th width="20%" style="text-align: left;">อุปกรณ์</th>
-            <td style="text-align: center;"><?php echo $eq_name; ?></td>
-        </tr>
-        <tr>
-            <th style="text-align: left;">รายการแจ้งซ่อม</th>
-            <td style="text-align: center;"><?php echo $repair_title; ?></td>
-        </tr>
-        <tr>
-            <th style="text-align: left;">รายละเอียดการซ่อม</th>
-            <td style="text-align: center;"><?php echo $repair_desc; ?></td>
-        </tr>
-        <tr>
-            <th style="text-align: left;">อุปกรณ์ที่นำมาด้วย</th>
-            <td style="text-align: center;"><?php echo $eq_others; ?></td>
-        </tr>
-        <?php
+        <hr>
+        <span style="font-size: 14pt;">
+            รายการแจ้งซ่อม
+        </span>
+        <!-- <table width="100%" style="border:1px solid #000000; margin-top: 13px !important"> -->
+        <table class="items" width="100%" style="font-size: 14pt;border-collapse: collapse; " cellpadding="8">
+            <tr>
+                <th width="20%" style="text-align: left;">อุปกรณ์</th>
+                <td style="text-align: center;"><?php echo $eq_name; ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: left;">รายการแจ้งซ่อม</th>
+                <td style="text-align: center;"><?php echo $repair_title; ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: left;">รายละเอียดการซ่อม</th>
+                <td style="text-align: center;"><?php echo $repair_desc; ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: left;">อุปกรณ์ที่นำมาด้วย</th>
+                <td style="text-align: center;"><?php echo $eq_others; ?></td>
+            </tr>
+            <?php
         } // end while
     } else {?>
-        <tr>
-            <td class="text-center" height="50px" colspan="6">ไม่มีข้อมูล</td>
-        </tr>
-        <?php } 
+            <tr>
+                <td class="text-center" height="50px" colspan="6">ไม่มีข้อมูล</td>
+            </tr>
+            <?php } 
             ?>
 
-    </table>
+        </table>
 
-    <?php
+        <?php
                     //$repairid = filter_input(INPUT_POST, 'repairid', FILTER_SANITIZE_STRING);
 
                     $conditions = " AND u.repair_id = '$repairid' ";
@@ -293,8 +308,8 @@ mpdf-->
                     $stmt_data->execute();
                     $numb_rows = $stmt_data->rowCount();
                     ?>
-    <br>
-    <!-- <span style="font-size: 14pt;">รายละเอียดการซ่อม</span>
+        <br>
+        <!-- <span style="font-size: 14pt;">รายละเอียดการซ่อม</span>
     <table class="items" width="100%" style="font-size: 14pt; border-collapse: collapse;" cellpadding="8">
         <thead>
             <tr>
@@ -318,7 +333,7 @@ mpdf-->
             $status_date = date_db_2form($row['status_date']);
             $status_title = $row['status_title'];
             $status_desc = $row['status_desc'];
-            $staff_name = $row['prename_title'].$row['sfname'].' '.$row['slname'].' ('.$row['nickname'].')';
+            $staff_name = $row['prename_title'].$row['sfname'].' '.$row['slname'].'';
 
             $stmt_detail = $conn->prepare("SELECT GROUP_CONCAT(s.sfname,' ',s.slname) AS gstaff_name,GROUP_CONCAT(s.oid) AS gstaff_id
                 FROM ".DB_PREFIX.'repair_staff u 
@@ -356,50 +371,51 @@ mpdf-->
         </tbody>
     </table> -->
 
-    <!-- end: Invoice body-->
+        <!-- end: Invoice body-->
 
-    <!-- begin: Invoice footer-->
-    <div class="row justify-content-center bg-gray-100 py-8 px-8 py-md-10 px-md-0">
-        <div class="col-md-9">
-            หมายเหตุ :
-            <?php
+        <!-- begin: Invoice footer-->
+        <div class="row justify-content-center bg-gray-100 py-8 px-8 py-md-10 px-md-0">
+            <div class="col-md-9">
+                หมายเหตุ :
+                <?php
                 // if ($return_date != '') {
                 //     echo 'วันที่รับคืน : '.$return_date;
                 //     echo ' ผู้รับคืน : '.$return_username;
                 // }
 
                 ?>
+            </div>
         </div>
-    </div>
-    <!-- end: Invoice footer-->
-    <div>
-        <br> </br>
-    </div>
-    <table width="100%" hight="10%" style="font-size: 14pt; border-collapse: collapse;" cellpadding="3">
-        <tr>
-            <td width="50%" style="border: 0 mm solid #888888; ">
-                <span style="font-size: 14pt; color: black;">ผู้แจ้ง : <?php echo $fullname; ?></span>
-                <br>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</br>
-                <br>วันที่แจ้งซ่อม : <?php echo $repairdate; ?></br>
-            </td>
+        <!-- end: Invoice footer-->
+        <div>
+            <br> </br>
+        </div>
+        <table width="100%" hight="10%" style="font-size: 14pt; border-collapse: collapse;" cellpadding="3">
+            <tr>
+                <td width="50%" style="border: 0 mm solid #888888; ">
+                    <span style="font-size: 14pt; color: black;">ผู้แจ้ง : <?php echo $fullname; ?></span>
+                    <br>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</br>
+                    <br>วันที่แจ้งซ่อม : <?php echo $repairdate; ?></br>
+                </td>
 
-            <td width="20%" style="border: 0 mm solid #888888;">
+                <td width="20%" style="border: 0 mm solid #888888;">
 
-            </td>
+                </td>
 
-            <td width="30%" style="border: 0 mm solid #888888;">
-                <span style="font-size: 14pt; color:black;">ผู้รับแจ้ง : <?php echo getUsername($user_add); ?></span>
-                <br>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</br>
-                <br>วันที่อนุมัติแจ้งซ่อม : <?php echo $approve_date; ?> </br>
-            </td>
+                <td width="30%" style="border: 0 mm solid #888888;">
+                    <span style="font-size: 14pt; color:black;">ผู้ดำเนินการ :
+                        <?php echo $staff_names; ?></span>
+                    <br>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</br>
+                    <br>วันที่ออกซ่อม : <?php echo $status_date; ?> </br>
+                </td>
 
-        </tr>
-    </table>
+            </tr>
+        </table>
 
 
-    <!-- end::Card-->
+        <!-- end::Card-->
 
-    <!-- end div -->
+        <!-- end div -->
 </body>
 
 </html>
@@ -426,11 +442,7 @@ $mpdf = new \Mpdf\Mpdf([
      $mpdf->SetProtection(['print']);
      $mpdf->SetTitle('DFix Corp. - Repair invoices');
      $mpdf->SetAuthor('DFix Corp.');
-     $mpdf->SetWatermarkText('Repair invoice');
-     $mpdf->showWatermarkText = true;
-     $mpdf->watermark_font = 'DejaVuSansCondensed';
-     $mpdf->watermarkTextAlpha = 0.1;
-
+   
 $mpdf->SetDisplayMode('fullpage');
 $mpdf->WriteHTML($html);
 ob_end_clean();

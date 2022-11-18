@@ -447,12 +447,9 @@ $mpdf = new \Mpdf\Mpdf([
     'margin_footer' => 10,
      ]);
      $mpdf->SetProtection(['print']);
-     $mpdf->SetTitle('Goverlution. - Quotation');
-     $mpdf->SetAuthor('Goverlution.');
-     $mpdf->SetWatermarkText('Quotation');
-     $mpdf->showWatermarkText = true;
-     $mpdf->watermark_font = 'DejaVuSansCondensed';
-     $mpdf->watermarkTextAlpha = 0.1;
+     $mpdf->SetTitle('Thai ThaiAkitechPro. - Quotation');
+     $mpdf->SetAuthor('Thai ThaiAkitechPro.');
+    
 
 $mpdf->SetDisplayMode('fullpage');
 $mpdf->WriteHTML($html);

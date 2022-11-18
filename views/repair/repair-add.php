@@ -175,13 +175,24 @@ if($action == "edit"){
                             </div>
                         </div>
 
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <label>เลขบัตรประชาชน/เลขผู้เสียภาษี</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="เลขบัตรประชาชน/เลขผู้เสียภาษี"
                                     name="cid" id="cid" maxlength="13" value="<?php echo $row_person['cid'];?>" />
                                 <div class="input-group-append">
                                     <button class="btn btn-secondary" type="button" id="cidSearch"><i
+                                            class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <label>เลขที่ลูกค้า</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="เลขที่ลูกค้า"
+                                    name="org_code" id="[$org_code]" maxlength="13" value="<?php echo $row_person['org_code'];?>" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary" type="button" id="orgcodeSearch"><i
                                             class="fas fa-search"></i></button>
                                 </div>
                             </div>
@@ -719,6 +730,68 @@ $('#cidSearch').click(function(e) {
                     })
                     .then((value) => {
                         $('#fname').val(data.data['fname']);
+                        $('#org_code').val(data.data['org_code']);
+                        $('#prename').val(data.data['prename']);
+                        $('#lname').val(data.data['lname']);
+                        $('#comp_name').val(data.data['comp_name']);
+                        $('#comp_code').val(data.data['comp_code']);
+                        $('#telephone').val(data.data['telephone']);
+                        $('#email').val(data.data['email']);
+                        $('#house').val(data.data['house']);
+                        $('#community').val(data.data['community']);
+                        $('#road').val(data.data['road']);
+                        $('#village').val(data.data['village']);
+                        $("#changwat").val(data.data['changwat']).change();
+                        if (data.data['img_profile'] != null) {
+                            $("#img").attr("src", "uploads/person/" + data.data['img_profile']);
+                        } else {
+                            $("#img").attr("src", "uploads/no-image.jpg")
+                        }
+                        getoptselect_tambon_selected(data.data['changwat'], data.data['ampur'],
+                            data.data['tambon']);
+                        getoptselect_amphur_selected(data.data['changwat'], data.data['ampur'],
+                            data.data['tambon']);
+                    });
+            } else if (data.code == "404") {
+                //swal("ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง")
+                Swal.fire({
+                        icon: 'error',
+                        title: 'ไม่มีข้อมูล',
+                        text: 'กรุณาลองใหม่อีกครั้ง'
+                    })
+                    .then((value) => {
+                        //liff.closeWindow();
+                    });
+            }
+
+        },
+        error: function(jqXHR, exception) {
+            console.log(jqXHR);
+            // Your error handling logic here..
+        } // success
+    });
+}); //  click
+$('#orgcodeSearch').click(function(e) {
+    e.preventDefault();
+    var data = new FormData(this.form);
+    $.ajax({
+        type: "POST",
+        url: "core/repair/person-get-org-code.php",
+        dataType: "json",
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            if (data.code == "200") {
+                Swal.fire({
+                        icon: 'success',
+                        title: 'สำเร็จ',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    .then((value) => {
+                        $('#fname').val(data.data['fname']);
+                        $('#cid').val(data.data['cid']);
                         $('#prename').val(data.data['prename']);
                         $('#lname').val(data.data['lname']);
                         $('#comp_name').val(data.data['comp_name']);
