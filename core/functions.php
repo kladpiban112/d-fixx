@@ -828,21 +828,20 @@ function getEqcode($orgid,$datereceive)
 			
 			return $org_name;
 		}
-		function getOrgPostcode($orgid){
-					global $conn;
-					if($orgid != ""){
-						$stmt = $conn->prepare ("SELECT o.* FROM org_main o WHERE o.org_id = ? ");
-							$stmt->execute([$orgid]);
-							$row = $stmt->fetch(PDO::FETCH_ASSOC);
-							$org_name = $row['post_code'];
-							
-					}else  {
-						$org_name = "";
-					}
+function getOrgPostcode($orgid){
+			global $conn;
+			  if($orgid != ""){
+				$stmt = $conn->prepare ("SELECT o.* FROM org_main o WHERE o.org_id = ? ");
+					$stmt->execute([$orgid]);
+					$row = $stmt->fetch(PDO::FETCH_ASSOC);
+					$org_name = $row['post_code'];
 					
-					return $org_name;
+			  }else  {
+				$org_name = "";
+			  }
+			
+			return $org_name;
 		}
-		
 		function getOrgLogo($orgid){
 			global $conn;
 			  if($orgid != ""){

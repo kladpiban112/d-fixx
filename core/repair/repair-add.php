@@ -16,6 +16,8 @@ $repair_inout = filter_input(INPUT_POST, 'repair_inout', FILTER_SANITIZE_STRING)
 
 $org_id = filter_input(INPUT_POST, 'org_id', FILTER_SANITIZE_STRING);
 $cid = filter_input(INPUT_POST, 'cid', FILTER_SANITIZE_STRING);
+$org_code = filter_input(INPUT_POST, 'org_code', FILTER_SANITIZE_STRING);
+
 $prename = filter_input(INPUT_POST, 'prename', FILTER_SANITIZE_STRING);
 $fname = filter_input(INPUT_POST, 'fname', FILTER_SANITIZE_STRING);
 $lname = filter_input(INPUT_POST, 'lname', FILTER_SANITIZE_STRING);
@@ -66,7 +68,7 @@ if($exist_person!=0){
 	
 	$personid = $row['oid'];
 	
-	$query = "UPDATE ".DB_PREFIX."person_main SET cid = ?, org_id = ?, prename = ?, fname = ?, lname = ?, sex = ?,birthdate = ?,telephone = ?,house = ?,community = ?,road = ?,village = ?,tambon = ?,ampur = ?,changwat = ?,flag = ?,edit_date = ?,edit_users = ?,person_type = ? , comp_name = ? ,comp_code = ? ,email = ? WHERE oid = ? LIMIT 1"; 
+	$query = "UPDATE ".DB_PREFIX."person_main SET cid = ?, org_id = ?, prename = ?, fname = ?, lname = ?, sex = ?,birthdate = ?,telephone = ?,house = ?,community = ?,road = ?,village = ?,tambon = ?,ampur = ?,changwat = ?,flag = ?,edit_date = ?,edit_users = ?,person_type = ? , comp_name = ? ,comp_code = ? ,email = ? ,org_code = ? WHERE oid = ? LIMIT 1"; 
 	$stmt = $conn->prepare($query);
 	$stmt->bindParam(1, $cid, PDO::PARAM_STR);
 	$stmt->bindParam(2, $org_id, PDO::PARAM_STR);
@@ -90,7 +92,9 @@ if($exist_person!=0){
 	$stmt->bindParam(20, $comp_name, PDO::PARAM_STR);
 	$stmt->bindParam(21, $comp_code, PDO::PARAM_STR);
 	$stmt->bindParam(22, $email, PDO::PARAM_STR);
-	$stmt->bindParam(23, $personid, PDO::PARAM_INT);
+	$stmt->bindParam(23, $org_code, PDO::PARAM_INT);
+	$stmt->bindParam(24, $personid, PDO::PARAM_INT);
+	
 	$stmt->execute();
 
 	// AVATAR
@@ -182,7 +186,7 @@ if($exist_person!=0){
 }else{
 
 
-$query = "INSERT INTO ".DB_PREFIX."person_main (oid, cid, org_id, prename, fname, lname, sex,birthdate,telephone,house,community,road,village,tambon,ampur,changwat,flag,add_date,add_users,person_type,comp_name,comp_code,email) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,?,?,?,?,?)"; 
+$query = "INSERT INTO ".DB_PREFIX."person_main (oid, cid, org_id, prename, fname, lname, sex,birthdate,telephone,house,community,road,village,tambon,ampur,changwat,flag,add_date,add_users,person_type,comp_name,comp_code,email,org_code) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,?,?,?,?,?,?)"; 
 $stmt = $conn->prepare($query);
 $stmt->bindParam(1, $cid, PDO::PARAM_STR);
 $stmt->bindParam(2, $org_id, PDO::PARAM_STR);
@@ -206,6 +210,8 @@ $stmt->bindParam(19, $person_type, PDO::PARAM_STR);
 $stmt->bindParam(20, $comp_name, PDO::PARAM_STR);
 $stmt->bindParam(21, $comp_code, PDO::PARAM_STR);
 $stmt->bindParam(22, $email, PDO::PARAM_STR);
+$stmt->bindParam(23, $org_code, PDO::PARAM_INT);
+
 $stmt->execute();
 
 $person_oid = $conn->lastInsertId(); // last inserted ID
@@ -304,7 +310,7 @@ if($_FILES['img_profile']['name'])
 }else if($act == 'edit'){
 
 
-$query = "UPDATE ".DB_PREFIX."person_main SET cid = ?, org_id = ?, prename = ?, fname = ?, lname = ?, sex = ?,birthdate = ?,telephone = ?,house = ?,community = ?,road = ?,village = ?,tambon = ?,ampur = ?,changwat = ?,flag = ?,edit_date = ?,edit_users = ?,person_type = ? , comp_name = ? ,comp_code = ? ,email = ? WHERE oid = ? LIMIT 1"; 
+$query = "UPDATE ".DB_PREFIX."person_main SET cid = ?, org_id = ?, prename = ?, fname = ?, lname = ?, sex = ?,birthdate = ?,telephone = ?,house = ?,community = ?,road = ?,village = ?,tambon = ?,ampur = ?,changwat = ?,flag = ?,edit_date = ?,edit_users = ?,person_type = ? , comp_name = ? ,comp_code = ? ,email = ?,org_code = ? WHERE oid = ? LIMIT 1"; 
 $stmt = $conn->prepare($query);
 $stmt->bindParam(1, $cid, PDO::PARAM_STR);
 $stmt->bindParam(2, $org_id, PDO::PARAM_STR);
@@ -328,7 +334,8 @@ $stmt->bindParam(19, $person_type, PDO::PARAM_STR);
 $stmt->bindParam(20, $comp_name, PDO::PARAM_STR);
 $stmt->bindParam(21, $comp_code, PDO::PARAM_STR);
 $stmt->bindParam(22, $email, PDO::PARAM_STR);
-$stmt->bindParam(23, $personid, PDO::PARAM_INT);
+$stmt->bindParam(23, $org_code, PDO::PARAM_INT);
+$stmt->bindParam(24, $personid, PDO::PARAM_INT);
 $stmt->execute();
 
 
