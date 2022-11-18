@@ -145,7 +145,7 @@ if ($status != '') {
 
             $max = ' LIMIT '.($pagenum - 1) * $page_rows.','.$page_rows;
 
-            $sql = 'SELECT u.*,p.*,us.name,rp.*,o.org_shortname ,rt.status_date,rs.staff_id,sm.*,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,u.qt_status
+            $sql = 'SELECT u.*,p.*,us.name,rp.*,o.org_shortname ,rt.status_date,rs.staff_id,sm.*,t.repair_typetitle, e.*, st.status_title,u.qt_status
         FROM '.DB_PREFIX.'repair_main u 
         LEFT JOIN '.DB_PREFIX.'org_main o ON u.org_id = o.org_id 
         LEFT JOIN '.DB_PREFIX.'repair_type t ON u.repair_type = t.repair_typeid
@@ -222,6 +222,8 @@ if ($status != '') {
                 $repair_typetitle = $row['repair_typetitle'];
                 $repair_title = $row['repair_title'];
                 $eq_name = $row['eq_name'];
+                $eq_names = $row['eq_names'];
+
                 $eq_id = $row['eq_id'];
                 $eq_code = $row['eq_code'];
                 $status_title = $row['status_title'];
@@ -335,7 +337,7 @@ if ($status != '') {
 															?>
                         </td>
                         <td><?php echo $comp_name;?></td>
-                        <td><?php echo $eq_name; ?></br><small>รหัส : <?php echo $eq_code; ?></small></td>
+                        <td><?php echo $eq_names; ?>: <?php echo $eq_name; ?> </br><small>รหัส : <?php echo $eq_code; ?></small></td>
                         <td><?php echo $repair_title; ?></td>
                         <td><?php echo $fullname; ?></br><small>โทรศัพท์ : <?php echo $telephone; ?></small></td>
                         <td class="text-center"><?php echo $status_date; ?></td>

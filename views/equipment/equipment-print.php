@@ -22,8 +22,8 @@ if($action == "view"){
     $stmt_data->execute();	
     $row_person = $stmt_data->fetch(PDO::FETCH_ASSOC);
 
-    $eq_name = $row_person['eq_name'];
-    $eq_code = $row_person['eq_code'];
+    $eq_names = $row_person['eq_names'];
+    $eq_codes = $row_person['eq_codes'];
     $receive_date = date_db_2form($row_person['receive_date']);
 
                 $eq_typename = $row_person['eq_typename'];
@@ -82,8 +82,8 @@ if($action == "view"){
                 <div class="border-bottom w-100"></div>
                 <div class="d-flex justify-content-between pt-6">
                     <div class="d-flex flex-column flex-root">
-                        <span class="font-weight-bolder mb-2"><?php echo $eq_name;?></span>
-                        <span class="opacity-70">รหัสอุปกรณ์ : <?php echo $eq_code;?></span>
+                        <span class="font-weight-bolder mb-2"><?php echo $eq_names;?></span>
+                        <span class="opacity-70">รหัสอุปกรณ์ : <?php echo $eq_codes;?></span>
                         <span class="opacity-70">ประเภท : <?php echo  $eq_typename; echo $eq_typeother?></span>
                     </div>
                

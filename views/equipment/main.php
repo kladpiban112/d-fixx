@@ -3,7 +3,7 @@ error_reporting(0);
 $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_STRING);
 $eq_typeid = filter_input(INPUT_GET, 'eq_typeid', FILTER_SANITIZE_STRING);
 if($search != ""){
-    $search_data = " AND u.eq_code LIKE '%$search%' OR u.eq_name LIKE '%$search%'  ";
+    $search_data = " AND u.eq_codes LIKE '%$search%' OR u.eq_names LIKE '%$search%'  ";
 }
 if($eq_typeid != ""){
     $eq_typeid_data = " AND u.eq_typeid = '$eq_typeid'  ";
@@ -157,9 +157,9 @@ if($eq_typeid != ""){
                 $i++;
                 $oid = $row['oid'];
                 $oid_enc = base64_encode($oid);
-                $eq_name = $row['eq_name'];
+                $eq_names = $row['eq_names'];
                 $eq_desc = $row['eq_desc'];
-                $eq_code = $row['eq_code'];
+                $eq_codes = $row['eq_codes'];
                 $eq_number = $row['eq_number'];
                 $org_shortname = $row['org_shortname'];
                 $eq_typename = $row['eq_typename'];
@@ -201,9 +201,9 @@ if($eq_typeid != ""){
                 <img src="uploads/qrcode/<?php echo $oid;?>.png" alt="image"/>
                             
                 </div></a></td>
-                            <td><?php echo $eq_code;?></br><small> วันที่รับ : <?php echo $receive_date;?></small></td>
+                            <td><?php echo $eq_codes;?></br><small> วันที่รับ : <?php echo $receive_date;?></small></td>
                             <td><?php echo $eq_number;?></td>
-                            <td><?php echo $eq_name;?></td>
+                            <td><?php echo $eq_names;?></td>
                             <td ><?php 
                             echo $eq_typename;
                             echo $eq_typeother;

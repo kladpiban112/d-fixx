@@ -312,7 +312,7 @@
 
     
         
-    $stmt_data = $conn->prepare ("SELECT u.*,p.*,us.name,rp.*,rs.staff_id,sm.*,rt.status_date,o.org_shortname ,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title,pm.cost,pm.cost_payment,pm.cost_success
+    $stmt_data = $conn->prepare ("SELECT u.*,p.*,us.name,rp.*, e.*,rs.staff_id,sm.*,rt.status_date,o.org_shortname ,t.repair_typetitle,st.status_title,pm.cost,pm.cost_payment,pm.cost_success
     FROM ".DB_PREFIX."repair_main u 
     LEFT JOIN ".DB_PREFIX."org_main o ON u.org_id = o.org_id 
     LEFT JOIN ".DB_PREFIX."repair_type t ON u.repair_type = t.repair_typeid
@@ -394,6 +394,7 @@
 				$staff_name = $row['sfname'].' '.$row['slname'].'';
 				$status_date = date_db_2form($row['status_date']);
 				$place_id = $row['place_id'];
+				$eq_names = $row['eq_names'];
 
 				
 				$d1=strtotime($row['repair_date']);
@@ -475,7 +476,7 @@
 															?>
 		                                        </td>
 		                                        <td><?php echo $comp_name; ?></td>
-		                                        <td><?php echo $eq_name;?></br><small>รหัส : <?php echo $eq_code;?></small>
+                        						<td><?php echo $eq_names; ?>: <?php echo $eq_name; ?> </br><small>รหัส : <?php echo $eq_code; ?></small></td>
 		                                        </td>
 		                                        <td>
 													<a href="dashboard.php?module=repair&page=repair-print&personid=<?php echo $personid_enc;?>&repairid=<?php echo $repairid_enc;?>&act=<?php echo base64_encode('view');?>"

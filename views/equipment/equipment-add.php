@@ -50,7 +50,7 @@ if($action == "edit"){
 		<div class="form-group row">
 			<div class="col-lg-3">
 				<label>รหัสอุปกรณ์</label>
-				<input type="text" class="form-control"  name="eq_code" id="eq_code" placeholder="ระบบจะสร้างรหัสให้อัติโนมัติ" value="<?php echo $row_data['eq_code'];?>" readonly="true"/>
+				<input type="text" class="form-control"  name="eq_codes" id="eq_codes" placeholder="ระบบจะสร้างรหัสให้อัติโนมัติ" value="<?php echo $row_data['eq_codes'];?>" readonly="true"/>
 				<span class="form-text text-muted">ระบบจะสร้างรหัสให้อัติโนมัติ</span>
 			</div>
 
@@ -125,7 +125,7 @@ if($action == "edit"){
 		<div class="form-group row">
 			<div class="col-lg-12">
 				<label>ชื่ออุปกรณ์</label>
-				<input type="text" class="form-control"  name="eq_name" id="eq_name" placeholder="ชื่ออุปกรณ์" value="<?php echo $row_data['eq_name'];?>"/>
+				<input type="text" class="form-control"  name="eq_names" id="eq_names" placeholder="ชื่ออุปกรณ์" value="<?php echo $row_data['eq_names'];?>"/>
 				<span class="form-text text-muted"></span>
 			</div>
 		</div>

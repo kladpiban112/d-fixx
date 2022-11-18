@@ -13,7 +13,7 @@ require_once ABSPATH."/BarcodeQR.php";
 
 $act = filter_input(INPUT_GET, 'act', FILTER_SANITIZE_STRING);
 $eq_id = filter_input(INPUT_GET, 'oid', FILTER_SANITIZE_STRING);
-$eq_code = filter_input(INPUT_GET, 'eq_code', FILTER_SANITIZE_STRING);
+$eq_codes = filter_input(INPUT_GET, 'eq_codes', FILTER_SANITIZE_STRING);
 $now = date("Y-m-d H:i:s");
 $act = base64_decode($act);
 
@@ -26,7 +26,7 @@ $qr = new BarcodeQR();
 
 // create URL QR code
 $eq_id_enc = $eq_id;
-$qr->url(ADMIN_URL."/views/qrcode/index.php?eqid=$eq_id_enc&eqcode=$eq_code");
+$qr->url(ADMIN_URL."/views/qrcode/index.php?eqid=$eq_id_enc&eqcode=$eq_codes");
 
 // display new QR code image
 $eq_id = base64_decode($eq_id_enc);

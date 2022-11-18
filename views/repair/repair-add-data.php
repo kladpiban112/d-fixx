@@ -359,11 +359,10 @@ if ($action == 'edit') {
               $stmt_user_role->execute();
               while ($row = $stmt_user_role->fetch(PDO::FETCH_ASSOC)) {
                   $id_selected = $row['oid'];
-                  $eq_code = $row['eq_code'];
-                  $title_selected = stripslashes($row['eq_name']); ?>
+                  $title_selected = stripslashes($row['eq_names']); ?>
                                 <option value="<?php echo $id_selected; ?>" <?php if ($row_service['eq_id'] == $id_selected) {
                       echo 'selected';
-                  } ?>><?php echo '['.$eq_code.'] '.$title_selected; ?></option>
+                  } ?>><?php echo $title_selected; ?></option>
                                 <?php
               }
               ?>
@@ -373,12 +372,12 @@ if ($action == 'edit') {
                             </select>
                         </div>
                         <div class="col-lg-4">
-                            <label>ชื่ออุปกรณ์(อื่นๆ)</label>
+                            <label>ยี่ห้ออุปกรณ์</label>
                             <input type="text" class="form-control" placeholder="" name="eq_name" id="eq_name"
                                 value="<?php echo $row_service['eq_name']; ?>" />
                         </div>
                         <div class="col-lg-4">
-                            <label>รหัสอุปกรณ์(อื่นๆ)</label>
+                            <label>Model/SN</label>
                             <input type="text" class="form-control" placeholder="" name="eq_code" id="eq_code"
                                 value="<?php echo $row_service['eq_code']; ?>" />
                         </div>
@@ -1114,8 +1113,8 @@ $(document).ready(function() {
             $('#eq_name').prop('disabled', false);
             $('#eq_code').prop('disabled', false);
         } else {
-            $("#eq_name").attr('disabled', 'disabled');
-            $("#eq_code").attr('disabled', 'disabled');
+            $("#eq_name").attr('disabled', false);
+            $("#eq_code").attr('disabled', false);
             //$("#eq_typeother").val('');
         }
 

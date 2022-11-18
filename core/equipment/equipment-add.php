@@ -13,12 +13,12 @@ require_once ABSPATH."/BarcodeQR.php";
 
 $act = filter_input(INPUT_POST, 'act', FILTER_SANITIZE_STRING);
 $eq_id = filter_input(INPUT_POST, 'oid', FILTER_SANITIZE_STRING);
-$eq_code = filter_input(INPUT_POST, 'eq_code', FILTER_SANITIZE_STRING);
+$eq_codes = filter_input(INPUT_POST, 'eq_codes', FILTER_SANITIZE_STRING);
 $eq_number = filter_input(INPUT_POST, 'eq_number', FILTER_SANITIZE_STRING);
 $eq_typeid = filter_input(INPUT_POST, 'eq_typeid', FILTER_SANITIZE_STRING);
 $eq_typeother = filter_input(INPUT_POST, 'eq_typeother', FILTER_SANITIZE_STRING);
 $org_id = filter_input(INPUT_POST, 'org_id', FILTER_SANITIZE_STRING);
-$eq_name = filter_input(INPUT_POST, 'eq_name', FILTER_SANITIZE_STRING);
+$eq_names = filter_input(INPUT_POST, 'eq_names', FILTER_SANITIZE_STRING);
 $eq_desc = filter_input(INPUT_POST, 'eq_desc');
 //$eq_desc = $_POST['kt-ckeditor-1'];
 $eq_status = filter_input(INPUT_POST, 'eq_status', FILTER_SANITIZE_STRING);
@@ -39,7 +39,7 @@ if($act == 'add'){
 if($eq_code == ''){
 	$exist_data = 0;
 }else{
-	$stmt = $conn->prepare("SELECT * FROM ".DB_PREFIX."equipment_main WHERE eq_code = ?");
+	$stmt = $conn->prepare("SELECT * FROM ".DB_PREFIX."equipment_main WHERE eq_codes = ?");
 	$stmt->execute([$eq_code]);
 	$exist_data = $stmt->fetchColumn();
 
@@ -58,12 +58,12 @@ $now = date("Y-m-d H:i:s");
 //$host_reg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 //$activation_code = md5(random_code());	
 
-$query = "INSERT INTO ".DB_PREFIX."equipment_main (oid, eq_code, eq_typeid,eq_typeother, eq_name, eq_desc, org_id, receive_id,receive_other,receive_date, flag,add_date,add_users,donor_id,eq_number) VALUES (NULL, ?, ?, ?, ?,?, ?, ?,?,?, 1, ?, ?,?,?)"; 
+$query = "INSERT INTO ".DB_PREFIX."equipment_main (oid, eq_codes, eq_typeid,eq_typeother, eq_names, eq_desc, org_id, receive_id,receive_other,receive_date, flag,add_date,add_users,donor_id,eq_number) VALUES (NULL, ?, ?, ?, ?,?, ?, ?,?,?, 1, ?, ?,?,?)"; 
 $stmt = $conn->prepare($query);
 $stmt->bindParam(1, $eq_code_new, PDO::PARAM_STR);
 $stmt->bindParam(2, $eq_typeid, PDO::PARAM_STR);
 $stmt->bindParam(3, $eq_typeother, PDO::PARAM_STR);
-$stmt->bindParam(4, $eq_name, PDO::PARAM_STR);
+$stmt->bindParam(4, $eq_names, PDO::PARAM_STR);
 $stmt->bindParam(5, $eq_desc);
 $stmt->bindParam(6, $org_id, PDO::PARAM_STR);
 $stmt->bindParam(7, $receive_type, PDO::PARAM_INT);
@@ -193,12 +193,12 @@ $now = date("Y-m-d H:i:s");
 //$host_reg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 //$activation_code = md5(random_code());	
 
-$query = "UPDATE ".DB_PREFIX."equipment_main SET  eq_code = ?, eq_typeid =? ,eq_typeother = ? , eq_name=?, eq_desc = ?, org_id = ?, receive_id = ?,receive_other=?,receive_date = ?, flag =?,edit_date =?,edit_users =?,eq_number = ? WHERE oid = ? LIMIT 1"; 
+$query = "UPDATE ".DB_PREFIX."equipment_main SET  eq_codes = ?, eq_typeid =? ,eq_typeother = ? , eq_names=?, eq_desc = ?, org_id = ?, receive_id = ?,receive_other=?,receive_date = ?, flag =?,edit_date =?,edit_users =?,eq_number = ? WHERE oid = ? LIMIT 1"; 
 $stmt = $conn->prepare($query);
-$stmt->bindParam(1, $eq_code, PDO::PARAM_STR);
+$stmt->bindParam(1, $eq_codes, PDO::PARAM_STR);
 $stmt->bindParam(2, $eq_typeid, PDO::PARAM_STR);
 $stmt->bindParam(3, $eq_typeother, PDO::PARAM_STR);
-$stmt->bindParam(4, $eq_name, PDO::PARAM_STR);
+$stmt->bindParam(4, $eq_names, PDO::PARAM_STR);
 $stmt->bindParam(5, $eq_desc);
 $stmt->bindParam(6, $org_id, PDO::PARAM_STR);
 $stmt->bindParam(7, $receive_type, PDO::PARAM_INT);
