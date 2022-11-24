@@ -83,7 +83,7 @@ error_reporting(0);
                     }
                 
 
-                    $stmt_data = $conn->prepare("SELECT u.*,p.*,o.org_shortname ,rs.staff_id,sm.*,rt.status_date,t.repair_typetitle,if(e.eq_code IS NOT NULL ,e.eq_code,u.eq_code) AS eq_code, if(e.eq_name IS NOT NULL ,e.eq_name,u.eq_name) AS eq_name,st.status_title
+                    $stmt_data = $conn->prepare("SELECT u.*,p.*,o.org_shortname ,rs.staff_id,sm.*,e.*,rt.status_date,t.repair_typetitle,st.status_title
                     FROM ".DB_PREFIX."repair_main u 
                     LEFT JOIN ".DB_PREFIX."org_main o ON u.org_id = o.org_id 
                     LEFT JOIN ".DB_PREFIX."repair_type t ON u.repair_type = t.repair_typeid
@@ -153,6 +153,8 @@ error_reporting(0);
                             $repair_typetitle = $row['repair_typetitle'];
                             $repair_title = $row['repair_title'];
                             $eq_name = $row['eq_name'];
+                            $eq_names = $row['eq_names'];
+
                             $eq_id = $row['eq_id'];
                             $eq_code = $row['eq_code'];
                             $status_title = $row['status_title'];
@@ -202,7 +204,7 @@ error_reporting(0);
                                     <td><?php echo  $d2." วัน" ;?></td>
                                     <td><?php echo $repair_typetitle;?></td>
                                     <td><?php echo $comp_name;?></td>
-                                    <td><?php echo $eq_name;?></br><small>รหัส : <?php echo $eq_code;?></small></td>
+                                    <td><?php echo $eq_names; ?>: <?php echo $eq_name; ?> </br><small>รหัส : <?php echo $eq_code;?></small></td>
                                     <td><?php echo $repair_title;?></td>
                                     <td><?php echo $fullname;?></br><small>เลขบัตร : <?php echo $cid;?></small></td>
                                     <td class="text-center"><?php echo $status_date; ?></td>

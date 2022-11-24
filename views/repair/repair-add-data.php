@@ -337,7 +337,7 @@ if ($action == 'edit') {
 
                     <div class="form-group row">
                         <div class="col-lg-12">
-                            <label>เรื่องแจ้งซ่อม</label>
+                            <label>เรื่องแจ้งซ่อม</label> <label class="text-danger">*</label>
                             <input type="text" class="form-control" placeholder="" name="repair_title" id="repair_title"
                                 value="<?php echo $row_service['repair_title']; ?>" />
                         </div>
@@ -345,7 +345,7 @@ if ($action == 'edit') {
 
                     <div class="form-group row">
                         <div class="col-lg-4">
-                            <label>คลังอุปกรณ์</label>
+                            <label>รายการอุปกรณ์</label>
                             <select class="form-control " name="eq_id" id="eq_id">
                                 <option value="">ระบุ</option>
 
@@ -1101,8 +1101,8 @@ $(document).ready(function() {
     } else if (eq_id == '') {
 
     } else {
-        $("#eq_name").attr('disabled', 'disabled');
-        $("#eq_code").attr('disabled', 'disabled');
+        $("#eq_name").attr('disabled', false);
+        $("#eq_code").attr('disabled', false);
     }
 
     $('#eq_id').change(function(e) {

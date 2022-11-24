@@ -812,7 +812,7 @@ $('#btnSaveEquipment').click(function(e){
                     showConfirmButton: false,
                     timer: 1000
                     });
-        }else if ($('#eq_name').val().length == ""){
+        }else if ($('#eq_names').val().length == ""){
                 Swal.fire({
                     icon: 'error',
                     title: 'กรุณาระบุชื่อการอุปกรณ์',

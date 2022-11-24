@@ -70,14 +70,14 @@ $numb_rows = $stmt_data->rowCount();
 
                 <td><?php echo $status_date; ?></td>
                 <td class="text-center"> <?php 
-												if($status_typeid == 8 || $status_typeid ==9 ){  ?>
+												if($status_id == 8 || $status_id ==9 ){  ?>
                                                 
 															<h5><span class="badge bg-success">  <?php echo $status_title; ?></span></h5>
 															<?php }
-												elseif ( $status_typeid < 7  ) { ?>
+												elseif ( $status_id < 7  ) { ?>
 															<h5><span class="badge bg-warning"> <?php echo $status_title; ?></span></h5>
 															<?php }
-												elseif ( $status_typeid == 7  ) { ?>
+												elseif ( $status_id == 7  ) { ?>
 															<h5><span class="badge bg-danger"> <?php echo $status_title; ?></span></h5>
 															<?php }
 													?>    </td>

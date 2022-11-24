@@ -241,7 +241,20 @@
 		                    </div>
 		                </a>
 		            </div>
-
+		            <div class="col-xl-2">
+		                <a href="/./dashboard.php?act=&module=calendar&page=home"
+		                    class="text-dark text-hover-primary font-weight-bold font-size-lg mt-3">
+		                    <div class="card card-custom gutter-b bg-warning" style="height: 150px">
+		                        <div class="card-body">
+		                            <img src="./assets/images/event.png" alt="event" style="width:45x;height:45px;">
+		                            <!-- <span class="svg-icon svg-icon-3x svg-icon-success"><i class='bx bx-calendar bx-lg'></i></span> -->
+		                            <!-- แจ้งซ่อมวันนี้ -->
+		                            &nbsp; &nbsp; &nbsp; &nbsp;
+		                            <strong>ปฏิทินนัดหมาย</strong>
+		                        </div>
+		                    </div>
+		                </a>
+		            </div>
 
 
 
@@ -476,13 +489,15 @@
 															?>
 		                                        </td>
 		                                        <td><?php echo $comp_name; ?></td>
-                        						<td><?php echo $eq_names; ?>: <?php echo $eq_name; ?> </br><small>รหัส : <?php echo $eq_code; ?></small></td>
+		                                        <td><?php echo $eq_names; ?>: <?php echo $eq_name; ?> </br><small>รหัส :
+		                                                <?php echo $eq_code; ?></small></td>
 		                                        </td>
 		                                        <td>
-													<a href="dashboard.php?module=repair&page=repair-print&personid=<?php echo $personid_enc;?>&repairid=<?php echo $repairid_enc;?>&act=<?php echo base64_encode('view');?>"
-		                                                                class="navi-link">
-		                                                               <?php echo $repair_title;?>
-		                                                            </a></td>
+		                                            <a href="dashboard.php?module=repair&page=repair-print&personid=<?php echo $personid_enc;?>&repairid=<?php echo $repairid_enc;?>&act=<?php echo base64_encode('view');?>"
+		                                                class="navi-link">
+		                                                <?php echo $repair_title;?>
+		                                            </a>
+		                                        </td>
 		                                        <td><?php echo $fullname;?></br><small>เบอร์ติดต่อ :
 		                                                <?php echo $telephone;?></small>
 		                                        </td>

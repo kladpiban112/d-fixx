@@ -84,7 +84,7 @@ if($action == "edit"){
                         </div>
 
                         <div class="col-lg-3">
-                            <label>ประเภทรับบริการ</label>
+                            <label>ประเภทรับบริการ</label> 
                             <select class="form-control " name="repair_type" id="repair_type">
                                 <?php
 				
@@ -176,7 +176,7 @@ if($action == "edit"){
                         </div>
 
                         <div class="col-lg-3">
-                            <label>เลขบัตรประชาชน/เลขผู้เสียภาษี</label>
+                            <label>เลขบัตรประชาชน/เลขผู้เสียภาษี </label> <label class="text-danger">*</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="เลขบัตรประชาชน/เลขผู้เสียภาษี"
                                     name="cid" id="cid" maxlength="13" value="<?php echo $row_person['cid'];?>" />
@@ -187,7 +187,7 @@ if($action == "edit"){
                             </div>
                         </div>
                         <div class="col-lg-3">
-                            <label>เลขที่ลูกค้า</label>
+                            <label>เลขที่ลูกค้า</label> <label class="text-danger">*</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="เลขที่ลูกค้า"
                                     name="org_code" id="[$org_code]" maxlength="13" value="<?php echo $row_person['org_code'];?>" />
@@ -223,13 +223,13 @@ if($action == "edit"){
 
                         </div>
                         <div class="col-lg-5">
-                            <label>ชื่อ</label>
+                            <label>ชื่อ</label> <label class="text-danger">*</label>
                             <input type="text" class="form-control" name="fname" id="fname" placeholder="ชื่อ"
                                 value="<?php echo $row_person['fname'];?>" />
 
                         </div>
                         <div class="col-lg-5">
-                            <label>สกุล</label>
+                            <label>สกุล</label> <label class="text-danger">*</label>
                             <input type="text" class="form-control" name="lname" id="lname" placeholder="สกุล"
                                 value="<?php echo $row_person['lname'];?>" />
 
@@ -240,7 +240,7 @@ if($action == "edit"){
 
                     <div class="form-group row">
                         <div class="col-lg-9">
-                            <label>ชื่อบริษัท/หน่วยงาน</label>
+                            <label>ชื่อบริษัท/หน่วยงาน</label> <label class="text-danger">*</label>
                             <input type="text" class="form-control" name="comp_name" id="comp_name"
                                 placeholder="ชื่อบริษัท/หน่วยงาน" value="<?php echo $row_person['comp_name'];?>" />
                         </div>
@@ -257,7 +257,7 @@ if($action == "edit"){
                     <div class="form-group row">
 
                         <div class="col-lg-4">
-                            <label>โทรศัพท์</label>
+                            <label>โทรศัพท์</label> <span class="text-danger">*</span>
                             <input type="text" class="form-control" name="telephone" id="telephone"
                                 placeholder="โทรศัพท์" value="<?php echo $row_person['telephone'];?>" maxlength="10" />
                             <span class="form-text text-muted">หมายเลขโทรศัพท์ 10 หลัก</span>
