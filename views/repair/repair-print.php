@@ -84,11 +84,12 @@ if ($action == 'view') {
                             <!--end::Logo-->
                             <span class=" d-flex flex-column align-items-md-end opacity-70">
                                 <h5><?php echo getOrgName($row_person['org_id']); ?></h5>
-                                <span><?php echo getOrgAddr($row_person['org_id']); ?> <?php echo getOrgPostcode($row_person['org_id']); ?></span>
+                                <span><?php echo getOrgAddr($row_person['org_id']); ?>
+                                    <?php echo getOrgPostcode($row_person['org_id']); ?></span>
                                 <span>โทรศัพท์ <?php echo getOrgTelephone($row_person['org_id']); ?></span>
-                                <span> เลขประจำตัวผู้เสียภาษี  <?php echo getOrgTax($row_person['org_id']); ?></span>
-                               
-                                
+                                <span> เลขประจำตัวผู้เสียภาษี <?php echo getOrgTax($row_person['org_id']); ?></span>
+
+
                             </span>
                             </span>
                         </div>
@@ -99,12 +100,13 @@ if ($action == 'view') {
                     <div class="d-flex justify-content-between pt-6">
                         <div class="d-flex flex-column flex-root">
                             <span class="font-weight-bolder mb-2">ผู้แจ้ง</span>
-                            <span class="opacity-70"><?php echo $fullname; ?></span>
                             <span class="opacity-70">รหัสลูกค้า : <?php echo $org_code; ?></span>
+                            <span class="opacity-70">ชื่อ : <?php echo $fullname; ?></span>
                             <span class="opacity-70">หน่วยงาน : <?php echo $comp_name; ?></span>
-                            <span class="opacity-70">เลขที่บัตรประชาชน/เลขผู้เสียภาษี : <?php echo $cid; ?></span>
-                            <span class="opacity-70">โทรศัพท์ : <?php echo $telephone; ?></span>
                             <span class="opacity-70">ที่อยู่ : <?php  echo getPersonAddr($personid); ?></span>
+                            <span class="opacity-70">โทรศัพท์ : <?php echo $telephone; ?></span>
+                            <span class="opacity-70">เลขที่บัตรประชาชน/เลขผู้เสียภาษี : <?php echo $cid; ?></span>
+
                         </div>
 
                         <div class="d-flex flex-column flex-root">

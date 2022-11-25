@@ -94,8 +94,8 @@ if ($status != '') {
                 <div class="col-lg-3">
                     <label>ค้นหาข้อมูล</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="ค้นหาข้อมูล" name="search"
-                            id="search" value="<?php echo $search; ?>" />
+                        <input type="text" class="form-control" placeholder="ค้นหาข้อมูล" name="search" id="search"
+                            value="<?php echo $search; ?>" />
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                         </div>
@@ -145,7 +145,7 @@ if ($status != '') {
 
             $max = ' LIMIT '.($pagenum - 1) * $page_rows.','.$page_rows;
 
-            $sql = 'SELECT u.*,p.*,us.name,rp.*,o.org_shortname ,rt.status_date,rs.staff_id,sm.*,t.repair_typetitle, e.*, st.status_title,u.qt_status
+            $sql = 'SELECT u.*,p.*,us.name,rp.*,o.org_shortname ,rt.status_date,rs.staff_id,sm.*,t.repair_typetitle, e.*, st.status_title,u.qt_status,ur.*
         FROM '.DB_PREFIX.'repair_main u 
         LEFT JOIN '.DB_PREFIX.'org_main o ON u.org_id = o.org_id 
         LEFT JOIN '.DB_PREFIX.'repair_type t ON u.repair_type = t.repair_typeid
@@ -158,6 +158,8 @@ if ($status != '') {
 	    LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_staff WHERE add_date IN (SELECT max(add_date) FROM repair_staff GROUP BY service_id )) AS rs ON u.repair_id = rs.service_id
 	    LEFT JOIN  ".DB_PREFIX."staff_main sm ON rs.staff_id = sm.oid 
 	    LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_status WHERE add_date IN (SELECT max(add_date) FROM repair_status GROUP BY repair_id )) AS rt ON u.repair_id = rt.repair_id
+        LEFT JOIN ".DB_PREFIX."urgency_repair ur ON u.urgency_repair = ur.uid
+
         
 
         WHERE u.flag != 0 AND u.repair_inout = 'I'  $conditions $search_data  $repairdate_data $status_data
@@ -241,6 +243,11 @@ if ($status != '') {
                 $status_typeid = $row['repair_status'];
                 $status_date = date_db_2form($row['status_date']);
                 $comp_name = $row['comp_name'];
+                $u_title = $row['u_title'];
+                $uid = $row['uid'];
+
+                
+
 
 
 
@@ -337,8 +344,27 @@ if ($status != '') {
 															?>
                         </td>
                         <td><?php echo $comp_name;?></td>
-                        <td><?php echo $eq_names; ?>: <?php echo $eq_name; ?> </br><small>รหัส : <?php echo $eq_code; ?></small></td>
-                        <td><?php echo $repair_title; ?></td>
+                        <td><?php echo $eq_names; ?>: <?php echo $eq_name; ?> </br><small>รหัส :
+                                <?php echo $eq_code; ?></small></td>
+                        <td><a href="dashboard.php?module=repair&page=repair-print&personid=<?php echo $personid_enc;?>&repairid=<?php echo $repairid_enc;?>&act=<?php echo base64_encode('view');?>"
+                                class="navi-link">
+                                <?php echo $repair_title;?>
+                            </a>
+                            </br><small>ระดับของอาการ :
+                                <?php 
+												if($uid == 1 ){  ?>
+
+                                <span class="badge bg-success"> <?php echo $u_title; ?></span>
+                                <?php }
+												elseif ( $uid == 2  ) { ?>
+                                <span class="badge bg-warning"> <?php echo $u_title; ?></span>
+                                <?php }
+												elseif ( $uid == 3  ) { ?>
+                                <span class="badge bg-danger"> <?php echo $u_title; ?></span>
+                                <?php }
+													?>
+                            </small>
+                        </td>
                         <td><?php echo $fullname; ?></br><small>โทรศัพท์ : <?php echo $telephone; ?></small></td>
                         <td class="text-center"><?php echo $status_date; ?></td>
                         <td class="text-center"> <?php 

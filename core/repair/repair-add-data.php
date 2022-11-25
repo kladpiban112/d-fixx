@@ -40,6 +40,8 @@ $return_username = filter_input(INPUT_POST, 'return_username', FILTER_SANITIZE_S
 $repair_place = filter_input(INPUT_POST, 'repair_place', FILTER_SANITIZE_STRING); // 
 $repair_out = filter_input(INPUT_POST, 'repair_out', FILTER_SANITIZE_STRING); // 
 $repairoutdate = filter_input(INPUT_POST, 'repairoutdate', FILTER_SANITIZE_STRING); // 
+$urgency_repair = filter_input(INPUT_POST, 'urgency_repair', FILTER_SANITIZE_STRING); // 
+
 $repairoutdate = date_saveto_db($repairoutdate);
 
 if($repair_out == 'O'){
@@ -57,7 +59,7 @@ if($act == 'add'){
 
 
 
-	$query = "UPDATE ".DB_PREFIX."repair_main SET repair_title = ?, repair_desc = ?,edit_date = ?,edit_users = ?,eq_id = ? ,eq_name = ?,eq_code = ?,eq_others = ?,approve_date = ? ,approve_username = ?, return_date = ? ,return_username = ?,repair_place = ?,repair_warranty = ? WHERE repair_id = ? LIMIT 1"; 
+	$query = "UPDATE ".DB_PREFIX."repair_main SET repair_title = ?, repair_desc = ?,edit_date = ?,edit_users = ?,eq_id = ? ,eq_name = ?,eq_code = ?,eq_others = ?,approve_date = ? ,approve_username = ?, return_date = ? ,return_username = ?,repair_place = ?,repair_warranty = ?,urgency_repair = ? WHERE repair_id = ? LIMIT 1"; 
 	$stmt = $conn->prepare($query);
 
 	$stmt->bindParam(1, $repair_title, PDO::PARAM_STR);
@@ -74,7 +76,8 @@ if($act == 'add'){
     $stmt->bindParam(12, $return_username, PDO::PARAM_STR);
     $stmt->bindParam(13, $repair_place, PDO::PARAM_STR);
     $stmt->bindParam(14, $repair_warranty,PDO::PARAM_STR);
-	$stmt->bindParam(15, $repairid, PDO::PARAM_INT);
+    $stmt->bindParam(15, $urgency_repair,PDO::PARAM_STR);
+	$stmt->bindParam(16, $repairid, PDO::PARAM_INT);
 	$stmt->execute();
 
 if(count($_FILES["files"]['name']) != 0){
@@ -174,5 +177,3 @@ if(count($_FILES["doc"]['name']) != 0){
 			
 			
 			?>
-
-

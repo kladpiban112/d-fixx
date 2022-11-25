@@ -325,7 +325,7 @@
 
     
         
-    $stmt_data = $conn->prepare ("SELECT u.*,p.*,us.name,rp.*, e.*,rs.staff_id,sm.*,rt.status_date,o.org_shortname ,t.repair_typetitle,st.status_title,pm.cost,pm.cost_payment,pm.cost_success
+    $stmt_data = $conn->prepare ("SELECT u.*,p.*,us.name,rp.*, e.*,rs.staff_id,sm.*,rt.status_date,o.org_shortname ,t.repair_typetitle,st.status_title,pm.cost,pm.cost_payment,pm.cost_success,ur.*
     FROM ".DB_PREFIX."repair_main u 
     LEFT JOIN ".DB_PREFIX."org_main o ON u.org_id = o.org_id 
     LEFT JOIN ".DB_PREFIX."repair_type t ON u.repair_type = t.repair_typeid
@@ -339,6 +339,7 @@
 	LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_staff WHERE add_date IN (SELECT max(add_date) FROM repair_staff GROUP BY service_id )) AS rs ON u.repair_id = rs.service_id
 	LEFT JOIN  ".DB_PREFIX."staff_main sm ON rs.staff_id = sm.oid
 	LEFT JOIN  ".DB_PREFIX."(SELECT * FROM repair_status WHERE add_date IN (SELECT max(add_date) FROM repair_status GROUP BY repair_id )) AS rt ON u.repair_id = rt.repair_id
+	LEFT JOIN ".DB_PREFIX."urgency_repair ur ON u.urgency_repair = ur.uid
 
     WHERE u.flag != 0  $conditions
     ORDER BY u.repair_id DESC LIMIT 10");
@@ -408,6 +409,8 @@
 				$status_date = date_db_2form($row['status_date']);
 				$place_id = $row['place_id'];
 				$eq_names = $row['eq_names'];
+				$u_title = $row['u_title'];
+                $uid = $row['uid'];
 
 				
 				$d1=strtotime($row['repair_date']);
@@ -497,6 +500,20 @@
 		                                                class="navi-link">
 		                                                <?php echo $repair_title;?>
 		                                            </a>
+		                                            </br><small>ระดับของอาการ :
+		                                                <?php 
+												if($uid == 1 ){  ?>
+
+		                                                <span class="badge bg-success"> <?php echo $u_title; ?></span>
+		                                                <?php }
+												elseif ( $uid == 2  ) { ?>
+		                                                <span class="badge bg-warning"> <?php echo $u_title; ?></span>
+		                                                <?php }
+												elseif ( $uid == 3  ) { ?>
+		                                                <span class="badge bg-danger"> <?php echo $u_title; ?></span>
+		                                                <?php }
+													?>
+		                                            </small>
 		                                        </td>
 		                                        <td><?php echo $fullname;?></br><small>เบอร์ติดต่อ :
 		                                                <?php echo $telephone;?></small>

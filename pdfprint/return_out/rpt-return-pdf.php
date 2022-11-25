@@ -171,7 +171,7 @@ Page {PAGENO} of {nb}
 </htmlpagefooter>
 <sethtmlpageheader name="myheader" value="on" show-this-page="1" />
 <sethtmlpagefooter name="myfooter" value="on" />
-mpdf--><br/>
+mpdf--><br />
     <hr class="border-bottom w-100">
 
     <table width="100%" style="font-size: 14pt; border-collapse: collapse;" cellpadding="3">
@@ -179,12 +179,12 @@ mpdf--><br/>
             <td width="50%" style="border: 0 mm solid #888888; ">
                 <span style="font-size: 14pt; color: #555555;">ข้อมูลลูกค้า:</span>
 
-                 <br><?php echo $fullname; ?></br>
-                    <br>เลขที่ลูกค้า : <?php echo $org_code; ?></br>
-                    <br>หน่วยงาน : <?php echo $comp_name; ?></br>
-                    <br>ที่อยู่ : <?php  echo getPersonAddr($personid); ?></br>
-                    <br>โทรศัพท์ : <?php echo $telephone; ?></br>
-                    <br>เลขที่บัตรประชาชน/เลขผู้เสียภาษี : <?php echo $cid; ?></br>
+                <br>เลขที่ลูกค้า : <?php echo $org_code; ?></br>
+                <br>ชื่อ : <?php echo $fullname; ?></br>
+                <br>หน่วยงาน : <?php echo $comp_name; ?></br>
+                <br>ที่อยู่ : <?php  echo getPersonAddr($personid); ?></br>
+                <br>โทรศัพท์ : <?php echo $telephone; ?></br>
+                <br>เลขที่บัตรประชาชน/เลขผู้เสียภาษี : <?php echo $cid; ?></br>
 
             </td>
 

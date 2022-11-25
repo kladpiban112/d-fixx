@@ -23,6 +23,7 @@ if ($action == 'edit') {
     LEFT JOIN '.DB_PREFIX."repair_quotation_status qts ON s.qt_status = qts.qt_statusid
     LEFT JOIN ".DB_PREFIX."repair_status_type st ON s.repair_status = st.status_typeid
 
+
     WHERE s.repair_id = '$repairid' AND s.flag != '0'  LIMIT 1";
     $stmt_service = $conn->prepare($sql_service);
     $stmt_service->execute();
@@ -56,24 +57,24 @@ if ($action == 'edit') {
         <h3 class="card-title">
             <i class="fas fa-list"></i>&nbsp;&nbsp; <?php echo $txt_title; ?>รายละเอียดแจ้งซ่อม เลขที่ :
             <?php echo $row_service['repair_code']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          
-            สถานะปัจุบัน :   &nbsp;&nbsp;
+
+            สถานะปัจุบัน : &nbsp;&nbsp;
             <?php 
                     if($status_typeid == 8 || $status_typeid ==9 ){  ?>
-                                                            
-                        <span class="badge bg-success">  <?php echo $status_title; ?></span><?php }
+
+            <span class="badge bg-success"> <?php echo $status_title; ?></span><?php }
                     elseif ( $status_typeid < 7  ) { ?>
-                        <span class="badge bg-warning"> <?php echo $status_title; ?></span><?php }
+            <span class="badge bg-warning"> <?php echo $status_title; ?></span><?php }
                     elseif ( $status_typeid == 7  ) { ?>
-                        <span class="badge bg-danger"> <?php echo $status_title; ?></span><?php }
-            ?> 
+            <span class="badge bg-danger"> <?php echo $status_title; ?></span><?php }
+            ?>
 
         </h3>
-       
-        
-        
+
+
+
         <div class="card-toolbar">
-            
+
             <div class="example-tools justify-content-center">
                 <a href="dashboard.php?module=<?php echo $module; ?>"
                     class="btn btn-defalse btn-sm font-weight-bold mr-2" title="ย้อนกลับ"><i class="fa fa-chevron-left"
@@ -90,7 +91,7 @@ if ($action == 'edit') {
         <input type="hidden" class="form-control" name="org_id" id="org_id"
             value="<?php echo $row_service['org_id']; ?>" />
 
-            
+
         <div class="card-body">
 
 
@@ -317,7 +318,7 @@ if ($action == 'edit') {
                         <div class="col-lg-3">
                             <label>ประกันสินค้า</label>
                             <select class="form-control " name="repair_warranty" id="repair_warranty">
-                            <option value="" <?php if ($row_service['repair_warranty'] == '') {
+                                <option value="" <?php if ($row_service['repair_warranty'] == '') {
                         echo 'selected';
                     } ?>>ระบุ</option>
 
@@ -328,6 +329,26 @@ if ($action == 'edit') {
                         echo 'selected';
                     } ?>>มีประกัน</option>
 
+                            </select>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <label>ระดับความเร่งด่วน</label>
+                            <select class="form-control " name="urgency_repair" id="urgency_repair">
+                                <option value="">ระบุ</option>
+                                <?php
+
+                    $stmt_user_role = $conn->prepare('SELECT * FROM '.DB_PREFIX.'urgency_repair ');
+                    $stmt_user_role->execute();
+                    while ($row = $stmt_user_role->fetch(PDO::FETCH_ASSOC)) {
+                        $id_selected = $row['uid'];
+                        $title_selected = stripslashes($row['u_title']); ?>
+                                <option value="<?php echo $id_selected; ?>" <?php if ($row_service['urgency_repair'] == $id_selected) {
+                            echo 'selected';
+                        } ?>><?php echo $title_selected; ?></option>
+                                <?php
+                    }
+                    ?>
                             </select>
                         </div>
                     </div>
@@ -409,7 +430,7 @@ if ($action == 'edit') {
                             <span class="form-text text-muted">.jpg .png เท่านั้น</span>
                         </div>
                     </div>
-                    
+
                     <span class=""><i class="far fa-file-pdf"></i> อัพโหลดเอกสารเพิ่มเติม</span>
                     <hr>
                     <div class="form-group row">
@@ -470,6 +491,12 @@ if ($action == 'edit') {
                         </div>
 
                     </div>
+                    <span><i class="fas fa-list"></i> สถานะการซ่อม <a href="#" class="btn btn-sm btn-primary"
+                            data-toggle="modal" data-target="#modalAddStatus"><i class="far fa-plus-square"></i>
+                            บันทึกสถานะการซ่อม</a></span>
+                    <hr>
+                    <div id="status_detail"></div>
+                    <p></p>
 
                     <span><i class="fas fa-dollar-sign"></i> ค่าซ่อม
                         <!--<a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalAddCost"><i class="far fa-plus-square"></i> บันทึกค่าซ่อม</a>-->
@@ -479,7 +506,7 @@ if ($action == 'edit') {
 
                     <span><i class="fas fa-pen-square text-warning"></i> บันทึกรายละเอียดการซ่อม </span>
                     <hr>
-                    
+
 
                     <span><i class="fas fa-cog"></i> อะไหล่ <a href="#" class="btn btn-sm btn-primary"
                             data-toggle="modal" data-target="#modalAddSpare"><i class="far fa-plus-square"></i>
@@ -487,26 +514,24 @@ if ($action == 'edit') {
                     <hr>
                     <div id="spare_detail"></div>
 
-                    <span><i class="fas fa-list"></i> สถานะการซ่อม <a href="#" class="btn btn-sm btn-primary"
-                            data-toggle="modal" data-target="#modalAddStatus"><i class="far fa-plus-square"></i>
-                            บันทึกสถานะการซ่อม</a></span>
-                    <hr>
-                    <div id="status_detail"></div>
+
 
                     <span id="logistic"><i class="fas fa-truck"></i> การขนส่ง <a href="#" class="btn btn-sm btn-primary"
                             data-toggle="modal" data-target="#modalAddLogistic"><i class="far fa-plus-square"></i>
                             บันทึกการขนส่ง</a></span>
                     <hr id="logistic_detail_hr">
-                    <div id="logistic_detail"></div>   
+                    <div id="logistic_detail"></div>
 
-                    <span id="jobout"><i class="fas fa-truck"></i> เลขที่ใบส่งซ่อมภายนอก <a href="#" class="btn btn-sm btn-primary"
-                            data-toggle="modal" data-target="#modalAddjobout"><i class="far fa-plus-square"></i>
+                    <span id="jobout"><i class="fas fa-truck"></i> เลขที่ใบส่งซ่อมภายนอก <a href="#"
+                            class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalAddjobout"><i
+                                class="far fa-plus-square"></i>
                             บันทึกเลขที่ส่งซ่อม</a></span>
                     <hr id="่job">
-                    <div id="jobout_detail"></div>   
+                    <div id="jobout_detail"></div>
 
-                    <span><i class="fas fa-user-check"></i> ข้อมูลการรับคืน <a target="_blank" href="././pdfprint/return_in/rpt-return-pdf.php?personid=<?php echo $personid_enc; ?>&repairid=<?php echo $repairid_enc; ?>&act=<?php echo base64_encode('view'); ?>" class="btn btn-sm btn-primary"
-                            ><i class="far fa-plus-square"></i>
+                    <span><i class="fas fa-user-check"></i> ข้อมูลการรับคืน <a target="_blank"
+                            href="././pdfprint/return_in/rpt-return-pdf.php?personid=<?php echo $personid_enc; ?>&repairid=<?php echo $repairid_enc; ?>&act=<?php echo base64_encode('view'); ?>"
+                            class="btn btn-sm btn-primary"><i class="far fa-plus-square"></i>
                             พิมพ์ใบรับคืน</a></span>
                     <hr></span>
 
@@ -527,13 +552,13 @@ if ($action == 'edit') {
                     </div>
 
 
-                   
+
                     <span><i class="far fa-file-pdf"></i> เอกสารเพิ่มเติม </span>
                     <hr>
 
                     <div class="form-group row">
 
-                    <?php
+                        <?php
 
                     $sql_files = 'SELECT * FROM '.DB_PREFIX."repair_document WHERE repair_id = '$repairid' AND file_status = '1' ORDER BY file_id ASC ";
                     $stmt_files = $conn->prepare($sql_files);
@@ -545,16 +570,18 @@ if ($action == 'edit') {
                         $file_oldname = $row_files['file_oldname']; 
                         ?>
 
-                    <div class="col-lg-12">
+                        <div class="col-lg-12">
 
-                    <!--begin::Item-->
-                    <div class="mb-6">
+                            <!--begin::Item-->
+                            <div class="mb-6">
                                 <!--begin::Content-->
                                 <div class="d-flex align-items-center flex-grow-1">
                                     <!--begin::Checkbox-->
                                     <label class="mr-4">
-                                    <a href="uploads/repair/<?php echo $file_name; ?>" target="_blank">
-                                        <span class="label label-lg label-light-primary label-inline font-weight-bold py-2"><i class="fas fa-file-invoice"></i></span>
+                                        <a href="uploads/repair/<?php echo $file_name; ?>" target="_blank">
+                                            <span
+                                                class="label label-lg label-light-primary label-inline font-weight-bold py-2"><i
+                                                    class="fas fa-file-invoice"></i></span>
                                         </a>
                                         <span></span>
                                     </label>
@@ -565,20 +592,24 @@ if ($action == 'edit') {
                                         <!--begin::Info-->
                                         <div class="d-flex flex-column align-items-cente py-2 w-75">
                                             <!--begin::Title-->
-                                            <a href="uploads/repair/<?php echo $file_name; ?>" target="_blank" class="text-dark-75 font-weight-bold text-hover-primary font-size-lg mb-1">
+                                            <a href="uploads/repair/<?php echo $file_name; ?>" target="_blank"
+                                                class="text-dark-75 font-weight-bold text-hover-primary font-size-lg mb-1">
                                                 <?php echo $file_oldname;?>
                                             </a>
                                             <!--end::Title-->
 
                                             <!--begin::Data-->
-                                        
+
                                             <!--end::Data-->
                                         </div>
                                         <!--end::Info-->
 
                                         <!--begin::Label-->
-                                        <a href="#" onclick='confirm_delete_file(<?php echo $file_id; ?>)' title="ลบไฟล์">
-                                        <span class="label label-lg label-light-danger label-inline font-weight-bold py-4"><i class="fas fa-trash text-danger"></i></span>
+                                        <a href="#" onclick='confirm_delete_file(<?php echo $file_id; ?>)'
+                                            title="ลบไฟล์">
+                                            <span
+                                                class="label label-lg label-light-danger label-inline font-weight-bold py-4"><i
+                                                    class="fas fa-trash text-danger"></i></span>
                                         </a>
                                         <!--end::Label-->
                                     </div>
@@ -590,10 +621,10 @@ if ($action == 'edit') {
 
 
 
-                    
-                    </div>
 
-                    <?php
+                        </div>
+
+                        <?php
                     }
                     ?>
 
@@ -617,19 +648,19 @@ if ($action == 'edit') {
                               $file_name = $row_files['file_name']; ?>
 
                         <div class="col-lg-6">
-                        
+
                             <div class="symbol symbol-150 mr-3">
-                            <a href="uploads/repair/<?php echo $file_name; ?>" data-toggle="lightbox">
-                                <img src="uploads/repair/<?php echo $file_name; ?>" alt="image" class="img-fluid"/>
-                          </a>
+                                <a href="uploads/repair/<?php echo $file_name; ?>" data-toggle="lightbox">
+                                    <img src="uploads/repair/<?php echo $file_name; ?>" alt="image" class="img-fluid" />
+                                </a>
                                 <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
                                     data-action="remove" data-toggle="tooltip" title="ลบรูปภาพ">
                                     <a href="#" onclick='confirm_delete(<?php echo $file_id; ?>)'><i
                                             class="ki ki-bold-close icon-xs text-muted"></i></a>
                                 </span>
-                             </a>
+                                </a>
                             </div>
-                    
+
                         </div>
 
                         <?php
@@ -791,7 +822,8 @@ if ($action == 'edit') {
                         <div class="col-lg-2">
                             <label>วันที่ทำรายการ</label>
                             <input type="text" class="form-control" name="statusdate" id="statusdate"
-                                data-date-language="th-th" maxlength="10" placeholder="" value="<?php echo date('d').'/'.date('m').'/'.(date('Y')+543);?>" />
+                                data-date-language="th-th" maxlength="10" placeholder=""
+                                value="<?php echo date('d').'/'.date('m').'/'.(date('Y')+543);?>" />
                         </div>
                         <div class="col-lg-4">
                             <label>สถานะการซ่อม</label>
@@ -938,7 +970,8 @@ if ($action == 'edit') {
 </form>
 <!--end::Modal-->
 <!--begin::Modal ขนส่ง-->
-<div class="modal fade" id="modalAddLogistic" tabindex="-1" role="dialog" aria-labelledby="modalAddLogistic" aria-hidden="true">
+<div class="modal fade" id="modalAddLogistic" tabindex="-1" role="dialog" aria-labelledby="modalAddLogistic"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -954,7 +987,9 @@ if ($action == 'edit') {
                     <div class="form-group row">
                         <div class="col-lg-2">
                             <label>วันที่ทำรายการ</label>
-                            <input type="text" class="form-control" name="logisticdate" id="logisticdate" data-date-language="th-th" maxlength="10" placeholder="" value="<?php echo date('d').'/'.date('m').'/'.(date('Y')+543);?>" />
+                            <input type="text" class="form-control" name="logisticdate" id="logisticdate"
+                                data-date-language="th-th" maxlength="10" placeholder=""
+                                value="<?php echo date('d').'/'.date('m').'/'.(date('Y')+543);?>" />
                         </div>
 
                         <div class="col-lg-4">
@@ -1021,11 +1056,13 @@ if ($action == 'edit') {
 </form>
 <!--end::Modal-->
 <!--begin::Modal ส่งซ่อมภายนอก-->
-<div class="modal fade" id="modalAddjobout" tabindex="-1" role="dialog" aria-labelledby="modalAddjobout" aria-hidden="true">
+<div class="modal fade" id="modalAddjobout" tabindex="-1" role="dialog" aria-labelledby="modalAddjobout"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"><i class="far fa-plus-square"></i> เลขที่ส่งซ่อมภายนอก</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><i class="far fa-plus-square"></i> เลขที่ส่งซ่อมภายนอก
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
@@ -1037,7 +1074,9 @@ if ($action == 'edit') {
                     <div class="form-group row">
                         <div class="col-lg-2">
                             <label>วันที่ทำรายการ</label>
-                            <input type="text" class="form-control" name="job_date" id="job_date" data-date-language="th-th" maxlength="10" placeholder="" value="<?php echo date('d').'/'.date('m').'/'.(date('Y')+543);?>" />
+                            <input type="text" class="form-control" name="job_date" id="job_date"
+                                data-date-language="th-th" maxlength="10" placeholder=""
+                                value="<?php echo date('d').'/'.date('m').'/'.(date('Y')+543);?>" />
                         </div>
 
                         <div class="col-lg-4">
@@ -1081,8 +1120,8 @@ if ($action == 'edit') {
 <!--end::Modal-->
 <script>
 $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-  event.preventDefault();
-  $(this).ekkoLightbox();
+    event.preventDefault();
+    $(this).ekkoLightbox();
 });
 $(document).ready(function() {
     'use strict';
@@ -1230,7 +1269,7 @@ function loaddata_status_data() {
 function loaddata_logistic_data() {
     var repairid = $("#repairid").val();
     var personid = $("#personid").val();
-    
+
     $.ajax({
         type: "POST",
         url: "views/repairout/repairout-add-data-logistic.php",
@@ -1264,6 +1303,7 @@ function loaddata_cost_data() {
         } // success
     });
 }
+
 function loaddata_jobout() {
     var repairid = $("#repairid").val();
     var personid = $("#personid").val();
@@ -1281,6 +1321,7 @@ function loaddata_jobout() {
         } // success
     });
 }
+
 function check_data_repairout() {
     var repairid = $("#repairid").val();
     $.ajax({
@@ -1291,14 +1332,14 @@ function check_data_repairout() {
             repairid: repairid
         },
         success: function(data) {
-            if(data == 0){
+            if (data == 0) {
                 $("#logistic").hide();
                 $("#logistic_detail").hide();
                 $("#logistic_detail_hr").hide();
                 $("#jobout").hide();
                 $("#job").hide();
                 $("#jobout_detail").hide();
-            }else{
+            } else {
                 $("#logistic").show();
                 $("#logistic_detail").show();
                 $("#logistic_detail_hr").show();
@@ -1309,7 +1350,6 @@ function check_data_repairout() {
         } // success
     });
 }
-
 </script>
 
 
@@ -1390,7 +1430,8 @@ $('#btnSave').click(function(e) {
                             //liff.closeWindow();
                         });
                 }
-            },error: function (jqXHR, exception) {
+            },
+            error: function(jqXHR, exception) {
                 console.log(jqXHR);
                 // Your error handling logic here..
             } // success
@@ -1569,7 +1610,7 @@ $('#btnAddStatus').click(function(e) {
                             $('#status_desc').val('');
                             loaddata_status_data();
                         });
-                        check_data_repairout();
+                    check_data_repairout();
                 } else if (data.code == "404") {
                     //swal("ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง")
                     Swal.fire({
@@ -1652,7 +1693,8 @@ $('#btnAddCost').click(function(e) {
                             //liff.closeWindow();
                         });
                 }
-            },error: function (jqXHR, exception) {
+            },
+            error: function(jqXHR, exception) {
                 console.log(jqXHR);
                 // Your error handling logic here..
             } // success
